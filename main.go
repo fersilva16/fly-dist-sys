@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"slices"
 	"strconv"
 	"time"
 
@@ -42,6 +43,8 @@ func main() {
 	})
 
 	var messages []any;
+	var handled_messages []any;
+	var neighbours []string;
 
 	n.Handle("broadcast", func(msg maelstrom.Message) error {
 		var body map[string]any;
@@ -50,11 +53,25 @@ func main() {
 			return err;
 		}
 
-		messages = append(messages, body["message"])
+		if (slices.Contains(handled_messages, body["msg_id"])) {
+			return nil;
+		}
 
-		res_body := make(map[string]any);
+		handled_messages = append(handled_messages, body["msg_id"]);
 
-		res_body["type"] = "broadcast_ok";
+		messages = append(messages, body["message"]);
+		
+		for i := 0; i < len(neighbours); i++ {
+			n.Send(neighbours[i], map[string]any{
+				"type": "broadcast",
+				"message": body["message"],
+				"msg_id": body["msg_id"],
+			});
+		}
+
+		res_body := map[string]any{
+			"type": "broadcast_ok",
+		};
 		
 		return n.Reply(msg, res_body);
 	})
@@ -71,13 +88,25 @@ func main() {
 
 		return n.Reply(msg, body);
 	})
-
+	
 	n.Handle("topology", func(msg maelstrom.Message) error {
-		body := make(map[string]any)
+		var body map[string]any;
 
-		body["type"] = "topology_ok";
+		if err := json.Unmarshal(msg.Body, &body); err != nil {
+			return err;
+		}
 
-		return n.Reply(msg, body);
+		topology := body["topology"].(map[string]interface {})[n.ID()].([]interface{});
+
+		for i := 0; i < len(topology); i++ {
+			neighbours = append(neighbours, topology[i].(string))	
+		}
+
+		res_body := map[string]any{
+			"type": "topology_ok",
+		}
+
+		return n.Reply(msg, res_body);
 	})
 	if err := n.Run(); err != nil {
 		log.Fatal(err);
