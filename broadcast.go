@@ -3,14 +3,14 @@ package main
 import (
 	"encoding/json"
 	"slices"
+	"sync"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
 func broadcast(n *maelstrom.Node) {
 	var messages []any;
-	var handled_messages []any;
-	var neighbours []string;
+	neighbours := map[string]*sync.Map{};
 
 	n.Handle("broadcast", func(msg maelstrom.Message) error {
 		var body map[string]any;
@@ -19,20 +19,33 @@ func broadcast(n *maelstrom.Node) {
 			return err;
 		}
 
-		if (slices.Contains(handled_messages, body["msg_id"])) {
+		if (slices.Contains(messages, body["message"])) {
 			return nil;
 		}
 
-		handled_messages = append(handled_messages, body["msg_id"]);
-
 		messages = append(messages, body["message"]);
 		
-		for i := 0; i < len(neighbours); i++ {
-			n.Send(neighbours[i], map[string]any{
+		for id, messages := range neighbours {			
+			neighbour_message := map[string]any{
 				"type": "broadcast",
 				"message": body["message"],
-				"msg_id": body["msg_id"],
-			});
+			}
+			
+			messages.Store(body["msg_id"], neighbour_message);
+
+			go func(messages *sync.Map, id string) {
+				messages.Range(func (key any, raw_value any) bool {
+					message := raw_value.(map[string]any);
+					
+					n.RPC(id, message, func (reply_msg maelstrom.Message) error {
+						messages.Delete(key);
+						
+						return nil;
+					});
+					
+					return true;
+				});
+			}(messages, id);
 		}
 
 		res_body := map[string]any{
@@ -65,7 +78,9 @@ func broadcast(n *maelstrom.Node) {
 		topology := body["topology"].(map[string]interface {})[n.ID()].([]interface{});
 
 		for i := 0; i < len(topology); i++ {
-			neighbours = append(neighbours, topology[i].(string))	
+			id := topology[i].(string)
+
+			neighbours[id] = &sync.Map{};
 		}
 
 		res_body := map[string]any{
