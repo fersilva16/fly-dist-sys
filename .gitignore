@@ -1,3 +1,5 @@
 .direnv
 store
-build
+
+build/**
+!build/.gitkeep
