@@ -2,17 +2,20 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"slices"
 	"sync"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
-func broadcast(n *maelstrom.Node) {
+func main() {
+	node := maelstrom.NewNode()
+
 	var messages []any;
 	neighbours := map[string]*sync.Map{};
 
-	n.Handle("broadcast", func(msg maelstrom.Message) error {
+	node.Handle("broadcast", func(msg maelstrom.Message) error {
 		var body map[string]any;
 
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
@@ -37,7 +40,7 @@ func broadcast(n *maelstrom.Node) {
 				messages.Range(func (key any, raw_value any) bool {
 					message := raw_value.(map[string]any);
 					
-					n.RPC(id, message, func (reply_msg maelstrom.Message) error {
+					node.RPC(id, message, func (reply_msg maelstrom.Message) error {
 						messages.Delete(key);
 						
 						return nil;
@@ -52,30 +55,32 @@ func broadcast(n *maelstrom.Node) {
 			"type": "broadcast_ok",
 		};
 		
-		return n.Reply(msg, res_body);
+		return node.Reply(msg, res_body);
 	})
 
-	n.Handle("read", func(msg maelstrom.Message) error {
+	node.Handle("read", func(msg maelstrom.Message) error {
 		var body map[string]any;
 
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err;
 		}
 
-		body["type"] = "read_ok";
-		body["messages"] = messages;
+		res_body := map[string]any{
+			"type": "read_ok",
+			"messages": messages,
+		}
 
-		return n.Reply(msg, body);
+		return node.Reply(msg, res_body);
 	})
 	
-	n.Handle("topology", func(msg maelstrom.Message) error {
+	node.Handle("topology", func(msg maelstrom.Message) error {
 		var body map[string]any;
 
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err;
 		}
 
-		topology := body["topology"].(map[string]interface {})[n.ID()].([]interface{});
+		topology := body["topology"].(map[string]interface {})[node.ID()].([]interface{});
 
 		for i := 0; i < len(topology); i++ {
 			id := topology[i].(string)
@@ -87,6 +92,10 @@ func broadcast(n *maelstrom.Node) {
 			"type": "topology_ok",
 		}
 
-		return n.Reply(msg, res_body);
+		return node.Reply(msg, res_body);
 	})
+	
+	if err := node.Run(); err != nil {
+		log.Fatal(err);
+	}
 }

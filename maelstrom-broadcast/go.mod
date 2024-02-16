@@ -1,4 +1,4 @@
-module fly-dist-sys
+module fly-dist-sys/maelstrom-broadcast
 
 go 1.21.6
 
