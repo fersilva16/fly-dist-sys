@@ -8,24 +8,24 @@ import (
 )
 
 func main() {
-	node := maelstrom.NewNode()
+  node := maelstrom.NewNode()
 
-	node.Handle("echo", func (msg maelstrom.Message) error {
-		var body map[string]any;
+  node.Handle("echo", func (msg maelstrom.Message) error {
+    var body map[string]any;
 
-		if err := json.Unmarshal(msg.Body, &body); err != nil {
-			return err;
-		}
+    if err := json.Unmarshal(msg.Body, &body); err != nil {
+      return err;
+    }
 
-		res_body := map[string]any{
-			"type": "echo_ok",
-			"echo": body["echo"],
-		};
+    res_body := map[string]any{
+      "type": "echo_ok",
+      "echo": body["echo"],
+    };
 
-		return node.Reply(msg, res_body)
-	});
+    return node.Reply(msg, res_body)
+  });
 
-	if err := node.Run(); err != nil {
-		log.Fatal(err);
-	}
+  if err := node.Run(); err != nil {
+    log.Fatal(err);
+  }
 }
