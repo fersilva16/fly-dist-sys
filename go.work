@@ -3,3 +3,4 @@ go 1.21.6
 use ./maelstrom-echo
 use ./maelstrom-unique-ids
 use ./maelstrom-broadcast
+use ./maelstrom-counter
