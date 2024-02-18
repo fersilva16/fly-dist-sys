@@ -9,32 +9,43 @@ import (
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
+type BroadcastRequest struct {
+	Type string `json:"type"`;
+	MsgID int `json:"msg_id"`;
+	Message int `json:"message"`;
+}
+
+type TopologyRequest struct {
+	Type string `json:"type"`
+	Topology map[string][]string `json:"topology"`
+}
+
 func main() {
   node := maelstrom.NewNode()
 
-  var messages []any;
+  var messages []int;
   neighbours := map[string]*sync.Map{};
 
   node.Handle("broadcast", func(msg maelstrom.Message) error {
-    var body map[string]any;
+    var body BroadcastRequest;
 
     if err := json.Unmarshal(msg.Body, &body); err != nil {
       return err;
     }
 
-    if (slices.Contains(messages, body["message"])) {
+    if (slices.Contains(messages, body.Message)) {
       return nil;
     }
 
-    messages = append(messages, body["message"]);
+    messages = append(messages, body.Message);
     
     for id, messages := range neighbours {      
       neighbour_message := map[string]any{
         "type": "broadcast",
-        "message": body["message"],
+        "message": body.Message,
       }
       
-      messages.Store(body["msg_id"], neighbour_message);
+      messages.Store(body.MsgID, neighbour_message);
 
       go func(messages *sync.Map, id string) {
         messages.Range(func (key any, raw_value any) bool {
@@ -59,12 +70,6 @@ func main() {
   })
 
   node.Handle("read", func(msg maelstrom.Message) error {
-    var body map[string]any;
-
-    if err := json.Unmarshal(msg.Body, &body); err != nil {
-      return err;
-    }
-
     res_body := map[string]any{
       "type": "read_ok",
       "messages": messages,
@@ -74,16 +79,16 @@ func main() {
   })
   
   node.Handle("topology", func(msg maelstrom.Message) error {
-    var body map[string]any;
+    var body TopologyRequest;
 
     if err := json.Unmarshal(msg.Body, &body); err != nil {
       return err;
     }
 
-    topology := body["topology"].(map[string]interface {})[node.ID()].([]interface{});
+    topology := body.Topology[node.ID()];
 
     for i := 0; i < len(topology); i++ {
-      id := topology[i].(string)
+      id := topology[i];
 
       neighbours[id] = &sync.Map{};
     }
