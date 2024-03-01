@@ -8,7 +8,7 @@ import (
 )
 
 type EchoRequest struct {
-	Type string `json:"type"`;
+	maelstrom.MessageBody
 	Echo string `json:"echo"`;
 }
 

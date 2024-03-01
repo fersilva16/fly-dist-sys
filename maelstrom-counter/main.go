@@ -9,6 +9,7 @@ import (
 )
 
 type AddRequest struct {
+	maelstrom.MessageBody
 	Delta int `json:"delta"`;
 }
 
