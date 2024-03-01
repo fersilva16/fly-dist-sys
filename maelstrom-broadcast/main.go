@@ -10,13 +10,12 @@ import (
 )
 
 type BroadcastRequest struct {
-	Type string `json:"type"`;
-	MsgID int `json:"msg_id"`;
+	maelstrom.MessageBody
 	Message int `json:"message"`;
 }
 
 type TopologyRequest struct {
-	Type string `json:"type"`
+	maelstrom.MessageBody
 	Topology map[string][]string `json:"topology"`
 }
 
