@@ -1,0 +1,12 @@
+
+[TestGenerate1 - 1]
+{"src":"n0","dest":"c0","body":{"id":"n017094044270","in_reply_to":2,"type":"generate_ok"}}
+---
+
+[TestGenerate2 - 1]
+{"src":"n0","dest":"c0","body":{"id":"n017094044271","in_reply_to":2,"type":"generate_ok"}}
+---
+
+[TestGenerate3 - 1]
+{"src":"n1","dest":"c0","body":{"id":"n117094044272","in_reply_to":2,"type":"generate_ok"}}
+---
