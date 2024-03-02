@@ -1,0 +1,20 @@
+
+[TestTopology1 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"topology_ok"}}
+---
+
+[TestTopology1 - 2]
+map[string]*sync.Map{
+}
+---
+
+[TestTopology2 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"topology_ok"}}
+---
+
+[TestTopology2 - 2]
+{
+ "n1": {},
+ "n3": {}
+}
+---
