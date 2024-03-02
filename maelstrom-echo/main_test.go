@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"testing"
 
+	test_utils "github.com/fersilva16/fly-dist-sys/maelstrom-test-utils"
 	"github.com/gkampitakis/go-snaps/snaps"
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 	"github.com/stretchr/testify/require"
@@ -24,7 +25,7 @@ func TestEcho(t *testing.T) {
 		return;
 	}
 
-	err := init_node(stdin, stdout);
+	err := test_utils.InitNode(stdin, stdout);
 
 	require.NoError(err);
 
@@ -39,11 +40,11 @@ func TestEcho(t *testing.T) {
 
 	require.NoError(body_err);
 
-	send_err := send(stdin,body);
+	send_err := test_utils.Send(stdin,body);
 
 	require.NoError(send_err);
 
-	output, read_err := read(stdout);
+	output, read_err := test_utils.Read(stdout);
 
 	require.NoError(read_err);
 

@@ -1,14 +1,15 @@
-package main
+package test_utils
 
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"io"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
-func send(stdin io.WriteCloser, body json.RawMessage) error {
+func Send(stdin io.WriteCloser, body json.RawMessage) error {
 	msg := maelstrom.Message{
 		Src: "c0",
 		Dest: "n0",
@@ -27,7 +28,7 @@ func send(stdin io.WriteCloser, body json.RawMessage) error {
 	return nil;
 }
 
-func read(stdout io.ReadCloser) (string, error) {
+func Read(stdout io.ReadCloser) (string, error) {
 	in := bufio.NewScanner(stdout);
 
 	for in.Scan() {
@@ -41,7 +42,7 @@ func read(stdout io.ReadCloser) (string, error) {
 	return "", nil;
 }
 
-func init_node(stdin io.WriteCloser, stdout io.ReadCloser) error {
+func InitNode(stdin io.WriteCloser, stdout io.ReadCloser) error {
 	body, body_err := json.Marshal(maelstrom.InitMessageBody{
 		MessageBody: maelstrom.MessageBody{
 			Type: "init",
@@ -56,35 +57,32 @@ func init_node(stdin io.WriteCloser, stdout io.ReadCloser) error {
 		return body_err;
 	}
 
-	err := send(stdin, body);
+	err := Send(stdin, body);
 
 	if err != nil {
 		return err;
 	}
 
+	msg, read_err := Read(stdout);
 
-	in := bufio.NewScanner(stdout);
-
-	for in.Scan() {
-		var message maelstrom.Message;
-		
-		if err := json.Unmarshal(in.Bytes(), &message); err != nil {
-			return err;
-		};
-		
-		var body maelstrom.MessageBody;
-		
-		if err := json.Unmarshal(message.Body, &body); err != nil {
-			return err;
-		};
-
-		if body.Type == "init_ok" && body.InReplyTo == 1 {
-			return nil;
-		}
+	if read_err != nil {
+		return read_err;
 	}
 
-	if err := in.Err(); err != nil {
+	var message maelstrom.Message;
+	
+	if err := json.Unmarshal([]byte(msg), &message); err != nil {
 		return err;
+	};
+	
+	var msg_body maelstrom.MessageBody;
+	
+	if err := json.Unmarshal(message.Body, &msg_body); err != nil {
+		return err;
+	};
+
+	if msg_body.Type != "init_ok" || msg_body.InReplyTo != 1 {
+		return fmt.Errorf("invalid message: %s", message.Body);
 	}
 	
 	return nil;
