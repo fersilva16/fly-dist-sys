@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"os/exec"
 	"testing"
 
 	test_utils "github.com/fersilva16/fly-dist-sys/maelstrom-test-utils"
@@ -14,19 +13,8 @@ import (
 func TestEcho(t *testing.T) {
 	require := require.New(t);
 
-	cmd := exec.Command("go", "run", "./main.go");
-
-	stdin, _ := cmd.StdinPipe();
-	stdout, _ := cmd.StdoutPipe();
-
-	if err := cmd.Start(); err != nil {
-		t.Error(err);
-
-		return;
-	}
-
-	err := test_utils.InitNode(stdin, stdout);
-
+	cmd, stdin, stdout, err := test_utils.NewNode(); 
+	
 	require.NoError(err);
 
 	body, body_err := json.Marshal(EchoRequest{
