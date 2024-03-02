@@ -12,9 +12,9 @@ type EchoRequest struct {
 	Echo string `json:"echo"`;
 }
 
-func main() {
-  node := maelstrom.NewNode()
+var node = maelstrom.NewNode();
 
+func main() {
   node.Handle("echo", func (msg maelstrom.Message) error {
     var body EchoRequest;
 

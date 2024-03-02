@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"testing"
 
 	test_utils "github.com/fersilva16/fly-dist-sys/maelstrom-test-utils"
@@ -13,10 +14,17 @@ import (
 func TestEcho(t *testing.T) {
 	require := require.New(t);
 
-	cmd, stdin, stdout, err := test_utils.NewNode(); 
-	
-	require.NoError(err);
+	var stdin io.WriteCloser;
+	var stdout io.ReadCloser;
 
+	node, stdin, stdout = test_utils.NewNode();
+
+	go main();
+	
+	init_err := test_utils.InitNode(stdin, stdout);
+
+	require.NoError(init_err);
+	
 	body, body_err := json.Marshal(EchoRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type: "echo",
@@ -37,8 +45,4 @@ func TestEcho(t *testing.T) {
 	require.NoError(read_err);
 
 	snaps.MatchSnapshot(t, output);
-
-	if err := cmd.Process.Kill(); err != nil {
-		t.Error(err)
-	}
 }
