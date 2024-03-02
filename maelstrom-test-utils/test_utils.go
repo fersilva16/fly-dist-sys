@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"os/exec"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
@@ -86,4 +87,21 @@ func InitNode(stdin io.WriteCloser, stdout io.ReadCloser) error {
 	}
 	
 	return nil;
+}
+
+func NewNode() (*exec.Cmd, io.WriteCloser, io.ReadCloser, error) {
+	cmd := exec.Command("go", "run", "./main.go");
+
+	stdin, _ := cmd.StdinPipe();
+	stdout, _ := cmd.StdoutPipe();
+
+	if err := cmd.Start(); err != nil {
+		return cmd, stdin, stdout, err;
+	}
+
+	if err := InitNode(stdin, stdout); err != nil {
+		return cmd, stdin, stdout, err;
+	}
+
+	return cmd, stdin, stdout, nil;
 }
