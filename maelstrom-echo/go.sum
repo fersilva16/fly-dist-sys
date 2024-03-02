@@ -1,2 +1,6 @@
+github.com/gkampitakis/go-snaps v0.5.2 h1:ay/6f7WHwRkOgpBec9DjMLRBAApziJommZ21NkOOCwY=
+github.com/gkampitakis/go-snaps v0.5.2/go.mod h1:ZABkO14uCuVxBHAXAfKG+bqNz+aa1bGPAg8jkI0Nk8Y=
 github.com/jepsen-io/maelstrom/demo/go v0.0.0-20231231190402-2674df7c1076 h1:F5ytAY6tuSPROoHctDr154A6ePf67xQ90Jre/IT+mJ8=
 github.com/jepsen-io/maelstrom/demo/go v0.0.0-20231231190402-2674df7c1076/go.mod h1:i6aVIs5AIOOaQF1lAisBm7DDeWM1Iopf+26UxjagsCU=
+github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
+github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=

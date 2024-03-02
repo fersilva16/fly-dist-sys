@@ -1,0 +1,4 @@
+
+[TestEcho - 1]
+{"src":"n0","dest":"c0","body":{"echo":"Please echo 1","in_reply_to":2,"type":"echo_ok"}}
+---
