@@ -1,0 +1,86 @@
+
+[TestSend1 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"offset":1,"type":"send_ok"}}
+---
+
+[TestSend1 - 2]
+1
+---
+
+[TestSend1 - 3]
+{
+ "6": 1
+}
+---
+
+[TestSend1 - 4]
+{
+ "6": [
+  [
+   1,
+   1
+  ]
+ ]
+}
+---
+
+[TestSend2 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"offset":2,"type":"send_ok"}}
+---
+
+[TestSend2 - 2]
+1
+---
+
+[TestSend2 - 3]
+{
+ "6": 2
+}
+---
+
+[TestSend2 - 4]
+{
+ "6": [
+  [
+   1,
+   1
+  ],
+  [
+   2,
+   1
+  ]
+ ]
+}
+---
+
+[TestSend3 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"offset":1001,"type":"send_ok"}}
+---
+
+[TestSend3 - 2]
+2
+---
+
+[TestSend3 - 3]
+{
+ "6": 1,
+ "9": 1001
+}
+---
+
+[TestSend3 - 4]
+{
+ "6": [
+  [
+   1,
+   1
+  ]
+ ],
+ "9": [
+  [
+   1001,
+   1
+  ]
+ ]
+}
+---
