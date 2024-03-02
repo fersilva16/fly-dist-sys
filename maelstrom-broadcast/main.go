@@ -19,11 +19,11 @@ type TopologyRequest struct {
 	Topology map[string][]string `json:"topology"`
 }
 
-func main() {
-  node := maelstrom.NewNode()
+var node = maelstrom.NewNode()
+var neighbours = map[string]*sync.Map{};
 
+func main() {
   var messages []int;
-  neighbours := map[string]*sync.Map{};
 
   node.Handle("broadcast", func(msg maelstrom.Message) error {
     var body BroadcastRequest;

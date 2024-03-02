@@ -21,7 +21,7 @@ func TestEcho(t *testing.T) {
 
 	go main();
 	
-	init_err := test_utils.InitNode(stdin, stdout, "n0");
+	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{ "n0" });
 
 	require.NoError(init_err);
 	

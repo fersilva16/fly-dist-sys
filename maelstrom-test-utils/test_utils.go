@@ -42,7 +42,7 @@ func Read(stdout io.ReadCloser) (string, error) {
 	return "", nil;
 }
 
-func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, node_id string) error {
+func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, node_id string, node_ids []string) error {
 	body, body_err := json.Marshal(maelstrom.InitMessageBody{
 		MessageBody: maelstrom.MessageBody{
 			Type: "init",
@@ -50,7 +50,7 @@ func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, node_id string) error 
 		},
 
 		NodeID: node_id,
-		NodeIDs: []string{ node_id },
+		NodeIDs: node_ids,
 	});
 
 	if body_err != nil {
