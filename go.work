@@ -5,4 +5,5 @@ use (
   ./maelstrom-unique-ids
   ./maelstrom-broadcast
   ./maelstrom-counter
+  ./maelstrom-test-utils
 )
