@@ -4,8 +4,7 @@
 ---
 
 [TestTopology1 - 2]
-map[string]*sync.Map{
-}
+{}
 ---
 
 [TestTopology2 - 1]
