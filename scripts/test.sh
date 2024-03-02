@@ -1,1 +1,1 @@
-go test -v ./maelstrom-echo # ./maelstrom-unique-ids ./maelstrom-broadcast ./maelstrom-counter
+go test -v ./maelstrom-echo ./maelstrom-unique-ids ./maelstrom-broadcast ./maelstrom-counter

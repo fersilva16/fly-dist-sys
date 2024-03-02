@@ -3,18 +3,17 @@ package main
 import (
 	"log"
 	"strconv"
-	"time"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
+var node = maelstrom.NewNode()
+var clock Clock = TimeClock{};
+var count int64;
+
 func main() {
-  node := maelstrom.NewNode()
-
-  var count int64;
-
   node.Handle("generate", func(msg maelstrom.Message) error {  
-		id := node.ID() + strconv.FormatInt(time.Now().Unix(), 10) + strconv.FormatInt(count, 10);
+		id := node.ID() + clock.Now() + strconv.FormatInt(count, 10);
 
     count += 1;
 
