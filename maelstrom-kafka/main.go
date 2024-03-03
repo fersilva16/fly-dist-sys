@@ -61,6 +61,8 @@ func main() {
 
 		o.offsets[body.Key]++;
 
+		offset := o.offsets[body.Key];
+
 		o.mu.Unlock();
 
 		m.mu.Lock();
@@ -69,13 +71,13 @@ func main() {
 			m.messages[body.Key] = [][]int{};
 		}
 
-		m.messages[body.Key] = append(m.messages[body.Key], []int{ o.offsets[body.Key], body.Msg });
+		m.messages[body.Key] = append(m.messages[body.Key], []int{ offset, body.Msg });
 
 		m.mu.Unlock();
 		
     res_body := map[string]any{
       "type": "send_ok",
-			"offset": o.offsets[body.Key],
+			"offset": offset,
     };
     
     return node.Reply(msg, res_body);
@@ -88,27 +90,29 @@ func main() {
 			return err;
     }
 
-		m.mu.RLock();
-
 		res_messages := make(map[string][][]int);
 
-		for key, msgs := range res_messages {
-			if body.Offsets[key] == 0 {
+		for key, offset := range body.Offsets {
+			m.mu.RLock();
+			
+			msgs := m.messages[key];
+
+			m.mu.RUnlock();
+	
+			if msgs == nil {
 				continue;
 			}
 
 			res_messages[key] = [][]int{};
 
 			for i := 0; i < len(msgs); i++ {
-				if msgs[i][0] < body.Offsets[key] {
+				if msgs[i][0] < offset {
 					continue;
 				}
 
-				res_messages[key][i] = msgs[i];
+				res_messages[key] = append(res_messages[key], msgs[i]);
 			}
 		}
-
-		m.mu.RUnlock();
 
     res_body := map[string]any{
       "type": "poll_ok", 
@@ -124,17 +128,17 @@ func main() {
     if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err;
     }
-
-		o.mu.Lock();
-
-		for key, offset := range body.Offsets {
-			o.offsets[key] = offset;
-		}
 		
-		o.mu.Unlock();
+		for key, offset := range body.Offsets {
+			o.mu.Lock();
+
+			o.offsets[key] = offset;
+			
+			o.mu.Unlock();
+		}
 
     res_body := map[string]any{
-      "type": "commit_offsets_ok", 
+      "type": "commit_offsets_ok",
     };
     
     return node.Reply(msg, res_body);
@@ -147,15 +151,30 @@ func main() {
 			return err;
     }
 
-		o.mu.RLock();
+		
+		res_offsets := map[string]int{};
+		
+		for i := 0; i < len(body.Keys); i++ {
+			o.mu.RLock();
+			
+			key := body.Keys[i];
+			offset := o.offsets[key]
+			
+			if offset == 0 {
+				continue;
+			}
 
+			res_offsets[key] = offset;
+
+			o.mu.RUnlock();
+		}
+
+		
     res_body := map[string]any{
       "type": "list_committed_offsets_ok",
-			"offsets": o.offsets,
+			"offsets": res_offsets,
     };
 
-		o.mu.RUnlock();
-    
     return node.Reply(msg, res_body);
   });
 
