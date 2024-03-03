@@ -22,8 +22,7 @@ func Send(stdin io.WriteCloser, body json.RawMessage) error {
 		return err;
 	}
 
-	stdin.Write(msgJSON);
-	stdin.Write([]byte{'\n'});
+	stdin.Write(append(msgJSON, '\n'));
 	
 	return nil;
 }

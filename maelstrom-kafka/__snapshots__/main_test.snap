@@ -84,3 +84,35 @@
  ]
 }
 ---
+
+[TestPoll1 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"msgs":{},"type":"poll_ok"}}
+---
+
+[TestPoll2 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"msgs":{},"type":"poll_ok"}}
+---
+
+[TestPoll3 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"msgs":{"6":[[1,1]]},"type":"poll_ok"}}
+---
+
+[TestPoll4 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"msgs":{"6":[[2,2]]},"type":"poll_ok"}}
+---
+
+[TestListCommitedOffsets1 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"offsets":{},"type":"list_committed_offsets_ok"}}
+---
+
+[TestListCommitedOffsets2 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"offsets":{"6":1},"type":"list_committed_offsets_ok"}}
+---
+
+[TestListCommitedOffsets3 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"offsets":{},"type":"list_committed_offsets_ok"}}
+---
+
+[TestListCommitedOffsets4 - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"offsets":{"6":1},"type":"list_committed_offsets_ok"}}
+---
