@@ -9,6 +9,7 @@ import (
 	"github.com/gkampitakis/go-snaps/snaps"
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 	"github.com/stretchr/testify/require"
+	"github.com/trailofbits/go-mutexasserts"
 )
 
 func TestSend1(t *testing.T) {
@@ -52,6 +53,11 @@ func TestSend1(t *testing.T) {
 	snaps.MatchJSON(t, offsets_offset)
 	snaps.MatchJSON(t, o.offsets)
 	snaps.MatchJSON(t, m.messages)
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestSend2(t *testing.T) {
@@ -95,6 +101,11 @@ func TestSend2(t *testing.T) {
 	snaps.MatchJSON(t, offsets_offset)
 	snaps.MatchJSON(t, o.offsets)
 	snaps.MatchJSON(t, m.messages)
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestSend3(t *testing.T) {
@@ -138,6 +149,11 @@ func TestSend3(t *testing.T) {
 	snaps.MatchJSON(t, offsets_offset)
 	snaps.MatchJSON(t, o.offsets)
 	snaps.MatchJSON(t, m.messages)
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestPoll1(t *testing.T) {
@@ -177,6 +193,11 @@ func TestPoll1(t *testing.T) {
 	require.NoError(read_err);
 
 	snaps.MatchSnapshot(t, output);
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestPoll2(t *testing.T) {
@@ -216,6 +237,11 @@ func TestPoll2(t *testing.T) {
 	require.NoError(read_err);
 
 	snaps.MatchSnapshot(t, output);
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestPoll3(t *testing.T) {
@@ -257,6 +283,11 @@ func TestPoll3(t *testing.T) {
 	require.NoError(read_err);
 
 	snaps.MatchSnapshot(t, output);
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestPoll4(t *testing.T) {
@@ -298,6 +329,11 @@ func TestPoll4(t *testing.T) {
 	require.NoError(read_err);
 
 	snaps.MatchSnapshot(t, output);
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestListCommitedOffsets1(t *testing.T) {
@@ -337,6 +373,11 @@ func TestListCommitedOffsets1(t *testing.T) {
 	require.NoError(read_err);
 
 	snaps.MatchSnapshot(t, output);
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestListCommitedOffsets2(t *testing.T) {
@@ -376,6 +417,11 @@ func TestListCommitedOffsets2(t *testing.T) {
 	require.NoError(read_err);
 
 	snaps.MatchSnapshot(t, output);
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestListCommitedOffsets3(t *testing.T) {
@@ -415,6 +461,11 @@ func TestListCommitedOffsets3(t *testing.T) {
 	require.NoError(read_err);
 
 	snaps.MatchSnapshot(t, output);
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }
 
 func TestListCommitedOffsets4(t *testing.T) {
@@ -454,4 +505,9 @@ func TestListCommitedOffsets4(t *testing.T) {
 	require.NoError(read_err);
 
 	snaps.MatchSnapshot(t, output);
+
+	require.False(mutexasserts.RWMutexLocked(&m.mu));
+	require.False(mutexasserts.RWMutexRLocked(&m.mu));
+	require.False(mutexasserts.RWMutexLocked(&o.mu));
+	require.False(mutexasserts.RWMutexRLocked(&o.mu));
 }

@@ -98,7 +98,7 @@
 ---
 
 [TestPoll4 - 1]
-{"src":"n0","dest":"c0","body":{"in_reply_to":2,"msgs":{"6":[[2,2]]},"type":"poll_ok"}}
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"msgs":{"6":[[2,2],[3,3]]},"type":"poll_ok"}}
 ---
 
 [TestListCommitedOffsets1 - 1]
