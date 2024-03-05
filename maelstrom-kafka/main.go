@@ -160,13 +160,13 @@ func main() {
 			key := body.Keys[i];
 			offset := o.offsets[key]
 			
+			o.mu.RUnlock();
+
 			if offset == 0 {
 				continue;
 			}
 
 			res_offsets[key] = offset;
-
-			o.mu.RUnlock();
 		}
 
 		
