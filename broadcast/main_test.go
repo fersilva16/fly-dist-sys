@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fly-dist-sys/testutils"
 	"io"
 	"testing"
@@ -25,7 +24,7 @@ func TestTopology1(t *testing.T) {
 
 	require.NoError(initErr)
 
-	body, bodyErr := json.Marshal(TopologyRequest{
+	output, err := testutils.RPC(stdin, stdout, TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "topology",
 			MsgID: 2,
@@ -34,15 +33,7 @@ func TestTopology1(t *testing.T) {
 		Topology: map[string][]string{"n0": {}},
 	})
 
-	require.NoError(bodyErr)
-
-	sendErr := testutils.Send(stdin, body)
-
-	require.NoError(sendErr)
-
-	output, readErr := testutils.Read(stdout)
-
-	require.NoError(readErr)
+	require.NoError(err)
 
 	snaps.MatchSnapshot(t, output)
 	snaps.MatchJSON(t, neighbours)
@@ -62,7 +53,7 @@ func TestTopology2(t *testing.T) {
 
 	require.NoError(initErr)
 
-	body, bodyErr := json.Marshal(TopologyRequest{
+	output, err := testutils.RPC(stdin, stdout, TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "topology",
 			MsgID: 2,
@@ -77,15 +68,7 @@ func TestTopology2(t *testing.T) {
 		},
 	})
 
-	require.NoError(bodyErr)
-
-	sendErr := testutils.Send(stdin, body)
-
-	require.NoError(sendErr)
-
-	output, readErr := testutils.Read(stdout)
-
-	require.NoError(readErr)
+	require.NoError(err)
 
 	snaps.MatchSnapshot(t, output)
 	snaps.MatchJSON(t, neighbours)

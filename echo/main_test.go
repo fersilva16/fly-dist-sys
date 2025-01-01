@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fly-dist-sys/testutils"
 	"io"
 	"testing"
@@ -25,7 +24,7 @@ func TestEcho(t *testing.T) {
 
 	require.NoError(initErr)
 
-	body, bodyErr := json.Marshal(EchoRequest{
+	output, err := testutils.RPC(stdin, stdout, EchoRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "echo",
 			MsgID: 2,
@@ -34,15 +33,7 @@ func TestEcho(t *testing.T) {
 		Echo: "Please echo 1",
 	})
 
-	require.NoError(bodyErr)
-
-	sendErr := testutils.Send(stdin, body)
-
-	require.NoError(sendErr)
-
-	output, readErr := testutils.Read(stdout)
-
-	require.NoError(readErr)
+	require.NoError(err)
 
 	snaps.MatchSnapshot(t, output)
 }

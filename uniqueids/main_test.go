@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fly-dist-sys/testutils"
 
 	"io"
@@ -34,20 +33,12 @@ func TestGenerateSingle(t *testing.T) {
 
 	require.NoError(initErr)
 
-	body, bodyErr := json.Marshal(maelstrom.MessageBody{
+	output, err := testutils.RPC(stdin, stdout, maelstrom.MessageBody{
 		Type:  "generate",
 		MsgID: 2,
 	})
 
-	require.NoError(bodyErr)
-
-	sendErr := testutils.Send(stdin, body)
-
-	require.NoError(sendErr)
-
-	output, readErr := testutils.Read(stdout)
-
-	require.NoError(readErr)
+	require.NoError(err)
 
 	snaps.MatchSnapshot(t, output)
 }
@@ -68,30 +59,20 @@ func TestGenerateMultiple(t *testing.T) {
 
 	require.NoError(initErr)
 
-	body, bodyErr := json.Marshal(maelstrom.MessageBody{
+	body := maelstrom.MessageBody{
 		Type:  "generate",
 		MsgID: 2,
-	})
+	}
 
-	require.NoError(bodyErr)
+	output1, err := testutils.RPC(stdin, stdout, body)
 
-	send1Err := testutils.Send(stdin, body)
-
-	require.NoError(send1Err)
-
-	output1, read1Err := testutils.Read(stdout)
-
-	require.NoError(read1Err)
+	require.NoError(err)
 
 	snaps.MatchSnapshot(t, output1)
 
-	send2Err := testutils.Send(stdin, body)
+	output2, err := testutils.RPC(stdin, stdout, body)
 
-	require.NoError(send2Err)
-
-	output2, read2Err := testutils.Read(stdout)
-
-	require.NoError(read2Err)
+	require.NoError(err)
 
 	snaps.MatchSnapshot(t, output2)
 }
