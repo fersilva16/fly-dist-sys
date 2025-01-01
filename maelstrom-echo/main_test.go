@@ -12,37 +12,37 @@ import (
 )
 
 func TestEcho(t *testing.T) {
-	require := require.New(t);
+	require := require.New(t)
 
-	var stdin io.WriteCloser;
-	var stdout io.ReadCloser;
+	var stdin io.WriteCloser
+	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode();
+	node, stdin, stdout = test_utils.NewNode()
 
-	go main();
-	
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{ "n0" });
+	go main()
 
-	require.NoError(init_err);
-	
+	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+
+	require.NoError(init_err)
+
 	body, body_err := json.Marshal(EchoRequest{
 		MessageBody: maelstrom.MessageBody{
-			Type: "echo",
+			Type:  "echo",
 			MsgID: 2,
 		},
 
 		Echo: "Please echo 1",
-	});
+	})
 
-	require.NoError(body_err);
+	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body);
+	send_err := test_utils.Send(stdin, body)
 
-	require.NoError(send_err);
+	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout);
+	output, read_err := test_utils.Read(stdout)
 
-	require.NoError(read_err);
+	require.NoError(read_err)
 
-	snaps.MatchSnapshot(t, output);
+	snaps.MatchSnapshot(t, output)
 }
