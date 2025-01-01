@@ -10,3 +10,23 @@
 [TestSingle - 3]
 {"src":"n0","dest":"c0","body":{"in_reply_to":2,"messages":[1],"type":"read_ok"}}
 ---
+
+[TestMulti - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"topology_ok"}}
+---
+
+[TestMulti - 2]
+{"src":"n0","dest":"n3","body":{"type":"broadcast","message":1}}
+---
+
+[TestMulti - 3]
+{"src":"n0","dest":"n1","body":{"type":"broadcast","message":1}}
+---
+
+[TestMulti - 4]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"broadcast_ok"}}
+---
+
+[TestMulti - 5]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"messages":[1],"type":"read_ok"}}
+---

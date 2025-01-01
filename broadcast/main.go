@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"slices"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
@@ -21,6 +22,7 @@ var node = maelstrom.NewNode()
 
 func main() {
 	messages := []int{}
+	neighbors := []string{}
 
 	node.Handle("broadcast", func(msg maelstrom.Message) error {
 		var body BroadcastRequest
@@ -29,13 +31,35 @@ func main() {
 			return err
 		}
 
-		messages = append(messages, body.Message)
+		if !slices.Contains(messages, body.Message) {
+			messages = append(messages, body.Message)
+
+			for _, neighbor := range neighbors {
+				neighborMsg := BroadcastRequest{
+					MessageBody: maelstrom.MessageBody{
+						Type: "broadcast",
+					},
+
+					Message: body.Message,
+				}
+
+				err := node.Send(neighbor, neighborMsg)
+
+				if err != nil {
+					return err
+				}
+			}
+		}
 
 		resBody := map[string]any{
 			"type": "broadcast_ok",
 		}
 
 		return node.Reply(msg, resBody)
+	})
+
+	node.Handle("broadcast_ok", func(msg maelstrom.Message) error {
+		return nil
 	})
 
 	node.Handle("read", func(msg maelstrom.Message) error {
@@ -48,6 +72,14 @@ func main() {
 	})
 
 	node.Handle("topology", func(msg maelstrom.Message) error {
+		var body TopologyRequest
+
+		if err := json.Unmarshal(msg.Body, &body); err != nil {
+			return err
+		}
+
+		neighbors = body.Topology[node.ID()]
+
 		resBody := map[string]any{
 			"type": "topology_ok",
 		}
