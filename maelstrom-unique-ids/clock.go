@@ -6,10 +6,10 @@ import (
 )
 
 type Clock interface {
-	Now() string;
+	Now() string
 }
 
-type TimeClock struct {};
+type TimeClock struct{}
 
 func (clock TimeClock) Now() string {
 	return strconv.FormatInt(time.Now().Unix(), 10)

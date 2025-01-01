@@ -9,28 +9,28 @@ import (
 
 type EchoRequest struct {
 	maelstrom.MessageBody
-	Echo string `json:"echo"`;
+	Echo string `json:"echo"`
 }
 
-var node = maelstrom.NewNode();
+var node = maelstrom.NewNode()
 
 func main() {
-  node.Handle("echo", func (msg maelstrom.Message) error {
-    var body EchoRequest;
+	node.Handle("echo", func(msg maelstrom.Message) error {
+		var body EchoRequest
 
-    if err := json.Unmarshal(msg.Body, &body); err != nil {
-      return err;
-    }
+		if err := json.Unmarshal(msg.Body, &body); err != nil {
+			return err
+		}
 
-    res_body := map[string]any{
-      "type": "echo_ok",
-      "echo": body.Echo,
-    };
+		res_body := map[string]any{
+			"type": "echo_ok",
+			"echo": body.Echo,
+		}
 
-    return node.Reply(msg, res_body)
-  });
+		return node.Reply(msg, res_body)
+	})
 
-  if err := node.Run(); err != nil {
-    log.Fatal(err);
-  }
+	if err := node.Run(); err != nil {
+		log.Fatal(err)
+	}
 }

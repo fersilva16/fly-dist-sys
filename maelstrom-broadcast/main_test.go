@@ -10,83 +10,83 @@ import (
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 	"github.com/stretchr/testify/require"
 )
+
 func TestTopology1(t *testing.T) {
-	require := require.New(t);
+	require := require.New(t)
 
-	var stdin io.WriteCloser;
-	var stdout io.ReadCloser;
+	var stdin io.WriteCloser
+	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode();
+	node, stdin, stdout = test_utils.NewNode()
 
-	go main();
-	
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{ "n0" });
+	go main()
 
-	require.NoError(init_err);
-	
+	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+
+	require.NoError(init_err)
+
 	body, body_err := json.Marshal(TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
-			Type: "topology",
+			Type:  "topology",
 			MsgID: 2,
 		},
 
-		Topology: map[string][]string{ "n0": {} },
-	});
+		Topology: map[string][]string{"n0": {}},
+	})
 
-	require.NoError(body_err);
+	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body);
+	send_err := test_utils.Send(stdin, body)
 
-	require.NoError(send_err);
+	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout);
+	output, read_err := test_utils.Read(stdout)
 
-	require.NoError(read_err);
+	require.NoError(read_err)
 
-	snaps.MatchSnapshot(t, output);
-	snaps.MatchJSON(t, neighbours);
+	snaps.MatchSnapshot(t, output)
+	snaps.MatchJSON(t, neighbours)
 }
 
 func TestTopology2(t *testing.T) {
-	require := require.New(t);
+	require := require.New(t)
 
-	var stdin io.WriteCloser;
-	var stdout io.ReadCloser;
+	var stdin io.WriteCloser
+	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode();
+	node, stdin, stdout = test_utils.NewNode()
 
-	go main();
-	
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{ "n0", "n1", "n2", "n3", "n4" });
+	go main()
 
-	require.NoError(init_err);
-	
+	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0", "n1", "n2", "n3", "n4"})
+
+	require.NoError(init_err)
+
 	body, body_err := json.Marshal(TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
-			Type: "topology",
+			Type:  "topology",
 			MsgID: 2,
 		},
 
 		Topology: map[string][]string{
-			"n0":{ "n3", "n1" },
-			"n1":{ "n4", "n2", "n0" },
-			"n2":{ "n1" },
-			"n3":{ "n0", "n4" },
-			"n4":{ "n1", "n3" },
+			"n0": {"n3", "n1"},
+			"n1": {"n4", "n2", "n0"},
+			"n2": {"n1"},
+			"n3": {"n0", "n4"},
+			"n4": {"n1", "n3"},
 		},
-	});
+	})
 
-	require.NoError(body_err);
+	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body);
+	send_err := test_utils.Send(stdin, body)
 
-	require.NoError(send_err);
+	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout);
+	output, read_err := test_utils.Read(stdout)
 
-	require.NoError(read_err);
+	require.NoError(read_err)
 
-	snaps.MatchSnapshot(t, output);
-	snaps.MatchJSON(t, neighbours);
+	snaps.MatchSnapshot(t, output)
+	snaps.MatchJSON(t, neighbours)
 }
-

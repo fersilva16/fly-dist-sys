@@ -8,24 +8,24 @@ import (
 )
 
 var node = maelstrom.NewNode()
-var clock Clock = TimeClock{};
-var count int64;
+var clock Clock = TimeClock{}
+var count int64
 
 func main() {
-  node.Handle("generate", func(msg maelstrom.Message) error {  
-		id := node.ID() + clock.Now() + strconv.FormatInt(count, 10);
+	node.Handle("generate", func(msg maelstrom.Message) error {
+		id := node.ID() + clock.Now() + strconv.FormatInt(count, 10)
 
-    count += 1;
+		count += 1
 
-    res_body := map[string]any{
-      "type": "generate_ok",
-      "id": id,
-    };
-    
-    return node.Reply(msg, res_body);
-  })
-  
-  if err := node.Run(); err != nil {
-    log.Fatal(err);
-  }
+		res_body := map[string]any{
+			"type": "generate_ok",
+			"id":   id,
+		}
+
+		return node.Reply(msg, res_body)
+	})
+
+	if err := node.Run(); err != nil {
+		log.Fatal(err)
+	}
 }

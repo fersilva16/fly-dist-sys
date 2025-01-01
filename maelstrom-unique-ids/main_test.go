@@ -11,108 +11,108 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type MockClock struct {}
+type MockClock struct{}
 
 func (clock MockClock) Now() string {
-	return "1709404427";
+	return "1709404427"
 }
 
 func TestGenerate1(t *testing.T) {
-	require := require.New(t);
+	require := require.New(t)
 
-	var stdin io.WriteCloser;
-	var stdout io.ReadCloser;
+	var stdin io.WriteCloser
+	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode();
-	clock = MockClock{};
+	node, stdin, stdout = test_utils.NewNode()
+	clock = MockClock{}
 
-	go main();
-	
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{ "n0" });
+	go main()
 
-	require.NoError(init_err);
-	
+	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+
+	require.NoError(init_err)
+
 	body, body_err := json.Marshal(maelstrom.MessageBody{
-		Type: "generate",
+		Type:  "generate",
 		MsgID: 2,
-	});
+	})
 
-	require.NoError(body_err);
+	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body);
+	send_err := test_utils.Send(stdin, body)
 
-	require.NoError(send_err);
+	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout);
+	output, read_err := test_utils.Read(stdout)
 
-	require.NoError(read_err);
+	require.NoError(read_err)
 
-	snaps.MatchSnapshot(t, output);
+	snaps.MatchSnapshot(t, output)
 }
 
 func TestGenerate2(t *testing.T) {
-	require := require.New(t);
+	require := require.New(t)
 
-	var stdin io.WriteCloser;
-	var stdout io.ReadCloser;
+	var stdin io.WriteCloser
+	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode();
-	clock = MockClock{};
-	count = 1;
+	node, stdin, stdout = test_utils.NewNode()
+	clock = MockClock{}
+	count = 1
 
-	go main();
-	
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{ "n0" });
+	go main()
 
-	require.NoError(init_err);
-	
+	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+
+	require.NoError(init_err)
+
 	body, body_err := json.Marshal(maelstrom.MessageBody{
-		Type: "generate",
+		Type:  "generate",
 		MsgID: 2,
-	});
+	})
 
-	require.NoError(body_err);
+	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body);
+	send_err := test_utils.Send(stdin, body)
 
-	require.NoError(send_err);
+	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout);
+	output, read_err := test_utils.Read(stdout)
 
-	require.NoError(read_err);
+	require.NoError(read_err)
 
-	snaps.MatchSnapshot(t, output);
+	snaps.MatchSnapshot(t, output)
 }
 
 func TestGenerate3(t *testing.T) {
-	require := require.New(t);
+	require := require.New(t)
 
-	var stdin io.WriteCloser;
-	var stdout io.ReadCloser;
+	var stdin io.WriteCloser
+	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode();
-	clock = MockClock{};
+	node, stdin, stdout = test_utils.NewNode()
+	clock = MockClock{}
 
-	go main();
-	
-	init_err := test_utils.InitNode(stdin, stdout, "n1", []string{ "n1" });
+	go main()
 
-	require.NoError(init_err);
-	
+	init_err := test_utils.InitNode(stdin, stdout, "n1", []string{"n1"})
+
+	require.NoError(init_err)
+
 	body, body_err := json.Marshal(maelstrom.MessageBody{
-		Type: "generate",
+		Type:  "generate",
 		MsgID: 2,
-	});
+	})
 
-	require.NoError(body_err);
+	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body);
+	send_err := test_utils.Send(stdin, body)
 
-	require.NoError(send_err);
+	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout);
+	output, read_err := test_utils.Read(stdout)
 
-	require.NoError(read_err);
+	require.NoError(read_err)
 
-	snaps.MatchSnapshot(t, output);
+	snaps.MatchSnapshot(t, output)
 }

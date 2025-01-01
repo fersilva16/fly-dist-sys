@@ -3,3 +3,5 @@ store
 
 build/**
 !build/.gitkeep
+
+.task
