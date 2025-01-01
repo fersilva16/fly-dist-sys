@@ -1,0 +1,129 @@
+version: '3'
+
+tasks:
+  test-all:
+    desc: Run all tests
+    cmds:
+      - task: test-echo
+      - task: test-unique-ids
+      - task: test-broadcast
+      - task: test-counter
+      - task: test-kafka
+
+  test-echo:
+    desc: Run echo test
+    cmds:
+      - go test ./maelstrom-echo
+
+  test-unique-ids:
+    desc: Run unique-ids test
+    cmds:
+      - go test ./maelstrom-unique-ids
+
+  test-broadcast:
+    desc: Run broadcast test
+    cmds:
+      - go test ./maelstrom-broadcast
+
+  test-counter:
+    desc: Run counter test
+    cmds:
+      - go test ./maelstrom-counter
+
+  test-kafka:
+    desc: Run kafka test
+    cmds:
+      - go test ./maelstrom-kafka
+
+  run-all:
+    desc: Run all
+    cmds:
+      - task: run-echo
+      - task: run-unique-ids
+      - task: run-broadcast
+      - task: run-counter
+      - task: run-kafka
+
+  run-echo:
+    desc: Run echo test
+    cmds:
+      - task: build-echo
+      - maelstrom test -w echo --bin ./build/maelstrom-echo --node-count 1 --time-limit 10
+
+  run-unique-ids:
+    desc: Run unique-ids test
+    cmds:
+      - task: build-unique-ids
+      - maelstrom test -w unique-ids --bin ./build/maelstrom-unique-ids --time-limit 30 --rate 1000 --node-count 3 --availability total --nemesis partition
+
+  run-broadcast:
+    desc: Run broadcast test
+    cmds:
+      - task: build-broadcast
+      - maelstrom test -w broadcast --bin ./build/maelstrom-broadcast --node-count 1 --time-limit 20 --rate 10
+
+  run-counter:
+    desc: Run counter test
+    cmds:
+      - task: build-counter
+      - maelstrom test -w g-counter --bin ./build/maelstrom-counter --node-count 3 --rate 100 --time-limit 20 --nemesis partition
+
+  run-kafka:
+    desc: Run kafka test
+    cmds:
+      - task: build-kafka
+      - maelstrom test -w kafka --bin ./build/maelstrom-kafka --node-count 1 --concurrency 2n --time-limit 20 --rate 1000
+
+  build-all:
+    desc: Build all
+    cmds:
+      - task: build-echo
+      - task: build-unique-ids
+      - task: build-broadcast
+      - task: build-counter
+      - task: build-kafka
+
+  build-echo:
+    desc: Build echo test
+    sources:
+      - maelstrom-echo/**/*
+    generates:
+      - build/maelstrom-echo
+    cmds:
+      - go build -o ./build ./maelstrom-echo
+
+  build-unique-ids:
+    desc: Build unique-ids test
+    sources:
+      - maelstrom-unique-ids/**/*
+    generates:
+      - build/maelstrom-unique-ids
+    cmds:
+      - go build -o ./build ./maelstrom-unique-ids
+
+  build-broadcast:
+    desc: Build broadcast test
+    sources:
+      - maelstrom-broadcast/**/*
+    generates:
+      - build/maelstrom-broadcast
+    cmds:
+      - go build -o ./build ./maelstrom-broadcast
+
+  build-counter:
+    desc: Build counter test
+    sources:
+      - maelstrom-counter/**/*
+    generates:
+      - build/maelstrom-counter
+    cmds:
+      - go build -o ./build ./maelstrom-counter
+
+  build-kafka:
+    desc: Build kafka test
+    sources:
+      - maelstrom-kafka/**/*
+    generates:
+      - build/maelstrom-kafka
+    cmds:
+      - go build -o ./build ./maelstrom-kafka

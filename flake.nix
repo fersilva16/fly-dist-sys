@@ -19,6 +19,7 @@
         devShell = with pkgs; mkShell {
           buildInputs = [
               go
+              go-task
               graphviz
               gnuplot
               maelstrom-clj
