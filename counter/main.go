@@ -26,13 +26,13 @@ func main() {
 
 		ctx := context.Background()
 
-		value, readErr := kv.ReadInt(ctx, "counter")
+		value, err := kv.ReadInt(ctx, "counter")
 
-		if readErr != nil {
+		if err != nil {
 			value = 0
 		}
 
-		err := kv.CompareAndSwap(ctx, "counter", value, value+body.Delta, true)
+		err = kv.CompareAndSwap(ctx, "counter", value, value+body.Delta, true)
 
 		if err != nil {
 			return err

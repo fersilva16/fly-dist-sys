@@ -20,9 +20,9 @@ func TestTopology1(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -49,9 +49,9 @@ func TestTopology2(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0", "n1", "n2", "n3", "n4"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0", "n1", "n2", "n3", "n4"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, TopologyRequest{
 		MessageBody: maelstrom.MessageBody{

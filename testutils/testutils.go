@@ -42,29 +42,29 @@ func Read(stdout io.ReadCloser) (string, error) {
 }
 
 func RPC(stdin io.WriteCloser, stdout io.ReadCloser, body any) (string, error) {
-	bodyMarshalled, bodyErr := json.Marshal(body)
+	bodyMarshalled, err := json.Marshal(body)
 
-	if bodyErr != nil {
-		return "", bodyErr
+	if err != nil {
+		return "", err
 	}
 
-	sendErr := Send(stdin, bodyMarshalled)
+	err = Send(stdin, bodyMarshalled)
 
-	if sendErr != nil {
-		return "", sendErr
+	if err != nil {
+		return "", err
 	}
 
-	output, readErr := Read(stdout)
+	output, err := Read(stdout)
 
-	if readErr != nil {
-		return "", readErr
+	if err != nil {
+		return "", err
 	}
 
 	return output, nil
 }
 
 func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, nodeId string, nodeIds []string) error {
-	body, bodyErr := json.Marshal(maelstrom.InitMessageBody{
+	body, err := json.Marshal(maelstrom.InitMessageBody{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "init",
 			MsgID: 1,
@@ -74,8 +74,8 @@ func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, nodeId string, nodeIds
 		NodeIDs: nodeIds,
 	})
 
-	if bodyErr != nil {
-		return bodyErr
+	if err != nil {
+		return err
 	}
 
 	err := Send(stdin, body)
@@ -84,10 +84,10 @@ func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, nodeId string, nodeIds
 		return err
 	}
 
-	msg, readErr := Read(stdout)
+	msg, err := Read(stdout)
 
-	if readErr != nil {
-		return readErr
+	if err != nil {
+		return err
 	}
 
 	var message maelstrom.Message
