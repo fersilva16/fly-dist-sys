@@ -1,4 +1,4 @@
-module fly-dist-sys/maelstrom-broadcast
+module fly-dist-sys/echo
 
 go 1.23
 

@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	test_utils "fly-dist-sys/maelstrom-test-utils"
+	test_utils "fly-dist-sys/testutils"
 	"io"
 	"testing"
 

@@ -1,4 +1,4 @@
-module fly-dist-sys/maelstrom-test-utils
+module fly-dist-sys/counter
 
 go 1.23
 

@@ -5,7 +5,7 @@ tasks:
     desc: Run all tests
     cmds:
       - task: test-echo
-      - task: test-unique-ids
+      - task: test-uniqueids
       - task: test-broadcast
       - task: test-counter
       - task: test-kafka
@@ -13,27 +13,27 @@ tasks:
   test-echo:
     desc: Run echo test
     cmds:
-      - go test ./maelstrom-echo
+      - go test ./echo
 
-  test-unique-ids:
-    desc: Run unique-ids test
+  test-uniqueids:
+    desc: Run uniqueids test
     cmds:
-      - go test ./maelstrom-unique-ids
+      - go test ./uniqueids
 
   test-broadcast:
     desc: Run broadcast test
     cmds:
-      - go test ./maelstrom-broadcast
+      - go test ./broadcast
 
   test-counter:
     desc: Run counter test
     cmds:
-      - go test ./maelstrom-counter
+      - go test ./counter
 
   test-kafka:
     desc: Run kafka test
     cmds:
-      - go test ./maelstrom-kafka
+      - go test ./kafka
 
   run-all:
     desc: Run all
@@ -48,37 +48,37 @@ tasks:
     desc: Run echo test
     cmds:
       - task: build-echo
-      - maelstrom test -w echo --bin ./build/maelstrom-echo --node-count 1 --time-limit 10
+      - maelstrom test -w echo --bin ./build/echo --node-count 1 --time-limit 10
 
-  run-unique-ids:
-    desc: Run unique-ids test
+  run-uniqueids:
+    desc: Run uniqueids test
     cmds:
-      - task: build-unique-ids
-      - maelstrom test -w unique-ids --bin ./build/maelstrom-unique-ids --time-limit 30 --rate 1000 --node-count 3 --availability total --nemesis partition
+      - task: build-uniqueids
+      - maelstrom test -w unique-ids --bin ./build/uniqueids --time-limit 30 --rate 1000 --node-count 3 --availability total --nemesis partition
 
   run-broadcast:
     desc: Run broadcast test
     cmds:
       - task: build-broadcast
-      - maelstrom test -w broadcast --bin ./build/maelstrom-broadcast --node-count 1 --time-limit 20 --rate 10
+      - maelstrom test -w broadcast --bin ./build/broadcast --node-count 1 --time-limit 20 --rate 10
 
   run-counter:
     desc: Run counter test
     cmds:
       - task: build-counter
-      - maelstrom test -w g-counter --bin ./build/maelstrom-counter --node-count 3 --rate 100 --time-limit 20 --nemesis partition
+      - maelstrom test -w g-counter --bin ./build/counter --node-count 3 --rate 100 --time-limit 20 --nemesis partition
 
   run-kafka:
     desc: Run kafka test
     cmds:
       - task: build-kafka
-      - maelstrom test -w kafka --bin ./build/maelstrom-kafka --node-count 1 --concurrency 2n --time-limit 20 --rate 1000
+      - maelstrom test -w kafka --bin ./build/kafka --node-count 1 --concurrency 2n --time-limit 20 --rate 1000
 
   build-all:
     desc: Build all
     cmds:
       - task: build-echo
-      - task: build-unique-ids
+      - task: build-uniqueids
       - task: build-broadcast
       - task: build-counter
       - task: build-kafka
@@ -86,44 +86,44 @@ tasks:
   build-echo:
     desc: Build echo test
     sources:
-      - maelstrom-echo/**/*
+      - echo/**/*
     generates:
-      - build/maelstrom-echo
+      - build/echo
     cmds:
-      - go build -o ./build ./maelstrom-echo
+      - go build -o ./build ./echo
 
-  build-unique-ids:
-    desc: Build unique-ids test
+  build-uniqueids:
+    desc: Build uniqueids test
     sources:
-      - maelstrom-unique-ids/**/*
+      - uniqueids/**/*
     generates:
-      - build/maelstrom-unique-ids
+      - build/uniqueids
     cmds:
-      - go build -o ./build ./maelstrom-unique-ids
+      - go build -o ./build ./uniqueids
 
   build-broadcast:
     desc: Build broadcast test
     sources:
-      - maelstrom-broadcast/**/*
+      - broadcast/**/*
     generates:
-      - build/maelstrom-broadcast
+      - build/broadcast
     cmds:
-      - go build -o ./build ./maelstrom-broadcast
+      - go build -o ./build ./broadcast
 
   build-counter:
     desc: Build counter test
     sources:
-      - maelstrom-counter/**/*
+      - counter/**/*
     generates:
-      - build/maelstrom-counter
+      - build/counter
     cmds:
-      - go build -o ./build ./maelstrom-counter
+      - go build -o ./build ./counter
 
   build-kafka:
     desc: Build kafka test
     sources:
-      - maelstrom-kafka/**/*
+      - kafka/**/*
     generates:
-      - build/maelstrom-kafka
+      - build/kafka
     cmds:
-      - go build -o ./build ./maelstrom-kafka
+      - go build -o ./build ./kafka
