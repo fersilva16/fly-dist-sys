@@ -1,10 +1,10 @@
-go 1.21.6
+go 1.23
 
 use (
-  ./maelstrom-echo
-  ./maelstrom-unique-ids
-  ./maelstrom-broadcast
-  ./maelstrom-counter
-  ./maelstrom-kafka
-  ./maelstrom-test-utils
+	./maelstrom-broadcast
+	./maelstrom-counter
+	./maelstrom-echo
+	./maelstrom-kafka
+	./maelstrom-test-utils
+	./maelstrom-unique-ids
 )
