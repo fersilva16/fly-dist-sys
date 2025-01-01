@@ -2,7 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	test_utils "fly-dist-sys/testutils"
+	"fly-dist-sys/testutils"
+
 	"io"
 	"testing"
 
@@ -23,13 +24,13 @@ func TestGenerateSingle(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	clock = MockClock{}
 	count = 0
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -40,11 +41,11 @@ func TestGenerateSingle(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -57,13 +58,13 @@ func TestGenerateMultiple(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	clock = MockClock{}
 	count = 0
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -74,21 +75,21 @@ func TestGenerateMultiple(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send1_err := test_utils.Send(stdin, body)
+	send1_err := testutils.Send(stdin, body)
 
 	require.NoError(send1_err)
 
-	output1, read1_err := test_utils.Read(stdout)
+	output1, read1_err := testutils.Read(stdout)
 
 	require.NoError(read1_err)
 
 	snaps.MatchSnapshot(t, output1)
 
-	send2_err := test_utils.Send(stdin, body)
+	send2_err := testutils.Send(stdin, body)
 
 	require.NoError(send2_err)
 
-	output2, read2_err := test_utils.Read(stdout)
+	output2, read2_err := testutils.Read(stdout)
 
 	require.NoError(read2_err)
 
