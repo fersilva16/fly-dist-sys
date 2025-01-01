@@ -41,6 +41,28 @@ func Read(stdout io.ReadCloser) (string, error) {
 	return "", nil
 }
 
+func RPC(stdin io.WriteCloser, stdout io.ReadCloser, body any) (string, error) {
+	bodyMarshalled, bodyErr := json.Marshal(body)
+
+	if bodyErr != nil {
+		return "", bodyErr
+	}
+
+	sendErr := Send(stdin, bodyMarshalled)
+
+	if sendErr != nil {
+		return "", sendErr
+	}
+
+	output, readErr := Read(stdout)
+
+	if readErr != nil {
+		return "", readErr
+	}
+
+	return output, nil
+}
+
 func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, nodeId string, nodeIds []string) error {
 	body, bodyErr := json.Marshal(maelstrom.InitMessageBody{
 		MessageBody: maelstrom.MessageBody{
