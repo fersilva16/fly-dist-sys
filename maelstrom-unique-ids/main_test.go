@@ -17,7 +17,7 @@ func (clock MockClock) Now() string {
 	return "1709404427"
 }
 
-func TestGenerate1(t *testing.T) {
+func TestGenerateSingle(t *testing.T) {
 	require := require.New(t)
 
 	var stdin io.WriteCloser
@@ -25,6 +25,7 @@ func TestGenerate1(t *testing.T) {
 
 	node, stdin, stdout = test_utils.NewNode()
 	clock = MockClock{}
+	count = 0
 
 	go main()
 
@@ -50,7 +51,7 @@ func TestGenerate1(t *testing.T) {
 	snaps.MatchSnapshot(t, output)
 }
 
-func TestGenerate2(t *testing.T) {
+func TestGenerateMultiple(t *testing.T) {
 	require := require.New(t)
 
 	var stdin io.WriteCloser
@@ -58,7 +59,7 @@ func TestGenerate2(t *testing.T) {
 
 	node, stdin, stdout = test_utils.NewNode()
 	clock = MockClock{}
-	count = 1
+	count = 0
 
 	go main()
 
@@ -73,46 +74,23 @@ func TestGenerate2(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send1_err := test_utils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(send1_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output1, read1_err := test_utils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(read1_err)
 
-	snaps.MatchSnapshot(t, output)
-}
+	snaps.MatchSnapshot(t, output1)
 
-func TestGenerate3(t *testing.T) {
-	require := require.New(t)
+	send2_err := test_utils.Send(stdin, body)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
+	require.NoError(send2_err)
 
-	node, stdin, stdout = test_utils.NewNode()
-	clock = MockClock{}
+	output2, read2_err := test_utils.Read(stdout)
 
-	go main()
+	require.NoError(read2_err)
 
-	init_err := test_utils.InitNode(stdin, stdout, "n1", []string{"n1"})
-
-	require.NoError(init_err)
-
-	body, body_err := json.Marshal(maelstrom.MessageBody{
-		Type:  "generate",
-		MsgID: 2,
-	})
-
-	require.NoError(body_err)
-
-	send_err := test_utils.Send(stdin, body)
-
-	require.NoError(send_err)
-
-	output, read_err := test_utils.Read(stdout)
-
-	require.NoError(read_err)
-
-	snaps.MatchSnapshot(t, output)
+	snaps.MatchSnapshot(t, output2)
 }
