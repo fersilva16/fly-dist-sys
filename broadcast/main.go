@@ -39,18 +39,18 @@ func main() {
 		messages = append(messages, body.Message)
 
 		for id, messages := range neighbours {
-			neighbour_message := map[string]any{
+			neighbourMessage := map[string]any{
 				"type":    "broadcast",
 				"message": body.Message,
 			}
 
-			messages.Store(body.MsgID, neighbour_message)
+			messages.Store(body.MsgID, neighbourMessage)
 
 			go func(messages *sync.Map, id string) {
-				messages.Range(func(key any, raw_value any) bool {
-					message := raw_value.(map[string]any)
+				messages.Range(func(key any, rawValue any) bool {
+					message := rawValue.(map[string]any)
 
-					node.RPC(id, message, func(reply_msg maelstrom.Message) error {
+					node.RPC(id, message, func(replyMsg maelstrom.Message) error {
 						messages.Delete(key)
 
 						return nil
@@ -61,20 +61,20 @@ func main() {
 			}(messages, id)
 		}
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type": "broadcast_ok",
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	node.Handle("read", func(msg maelstrom.Message) error {
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type":     "read_ok",
 			"messages": messages,
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	node.Handle("topology", func(msg maelstrom.Message) error {
@@ -92,11 +92,11 @@ func main() {
 			neighbours[id] = &sync.Map{}
 		}
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type": "topology_ok",
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	if err := node.Run(); err != nil {

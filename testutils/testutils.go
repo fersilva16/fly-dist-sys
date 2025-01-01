@@ -41,19 +41,19 @@ func Read(stdout io.ReadCloser) (string, error) {
 	return "", nil
 }
 
-func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, node_id string, node_ids []string) error {
-	body, body_err := json.Marshal(maelstrom.InitMessageBody{
+func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, nodeId string, nodeIds []string) error {
+	body, bodyErr := json.Marshal(maelstrom.InitMessageBody{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "init",
 			MsgID: 1,
 		},
 
-		NodeID:  node_id,
-		NodeIDs: node_ids,
+		NodeID:  nodeId,
+		NodeIDs: nodeIds,
 	})
 
-	if body_err != nil {
-		return body_err
+	if bodyErr != nil {
+		return bodyErr
 	}
 
 	err := Send(stdin, body)
@@ -62,10 +62,10 @@ func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, node_id string, node_i
 		return err
 	}
 
-	msg, read_err := Read(stdout)
+	msg, readErr := Read(stdout)
 
-	if read_err != nil {
-		return read_err
+	if readErr != nil {
+		return readErr
 	}
 
 	var message maelstrom.Message
@@ -74,13 +74,13 @@ func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, node_id string, node_i
 		return err
 	}
 
-	var msg_body maelstrom.MessageBody
+	var msgBody maelstrom.MessageBody
 
-	if err := json.Unmarshal(message.Body, &msg_body); err != nil {
+	if err := json.Unmarshal(message.Body, &msgBody); err != nil {
 		return err
 	}
 
-	if msg_body.Type != "init_ok" || msg_body.InReplyTo != 1 {
+	if msgBody.Type != "init_ok" || msgBody.InReplyTo != 1 {
 		return fmt.Errorf("invalid message: %s", message.Body)
 	}
 

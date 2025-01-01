@@ -22,12 +22,12 @@ func main() {
 			return err
 		}
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type": "echo_ok",
 			"echo": body.Echo,
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	if err := node.Run(); err != nil {

@@ -19,17 +19,17 @@ func TestSend1(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 0
+	offsetsOffset = 0
 	o.offsets = map[string]int{}
 	m.messages = map[string][][]int{}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(SendRequest{
+	body, bodyErr := json.Marshal(SendRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "send",
 			MsgID: 2,
@@ -39,18 +39,18 @@ func TestSend1(t *testing.T) {
 		Msg: 1,
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
-	snaps.MatchJSON(t, offsets_offset)
+	snaps.MatchJSON(t, offsetsOffset)
 	snaps.MatchJSON(t, o.offsets)
 	snaps.MatchJSON(t, m.messages)
 
@@ -67,17 +67,17 @@ func TestSend2(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 1
+	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(SendRequest{
+	body, bodyErr := json.Marshal(SendRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "send",
 			MsgID: 2,
@@ -87,18 +87,18 @@ func TestSend2(t *testing.T) {
 		Msg: 1,
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
-	snaps.MatchJSON(t, offsets_offset)
+	snaps.MatchJSON(t, offsetsOffset)
 	snaps.MatchJSON(t, o.offsets)
 	snaps.MatchJSON(t, m.messages)
 
@@ -115,17 +115,17 @@ func TestSend3(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 1
+	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(SendRequest{
+	body, bodyErr := json.Marshal(SendRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "send",
 			MsgID: 2,
@@ -135,18 +135,18 @@ func TestSend3(t *testing.T) {
 		Msg: 1,
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
-	snaps.MatchJSON(t, offsets_offset)
+	snaps.MatchJSON(t, offsetsOffset)
 	snaps.MatchJSON(t, o.offsets)
 	snaps.MatchJSON(t, m.messages)
 
@@ -163,17 +163,17 @@ func TestPoll1(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 0
+	offsetsOffset = 0
 	o.offsets = map[string]int{}
 	m.messages = map[string][][]int{}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(PollRequest{
+	body, bodyErr := json.Marshal(PollRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "poll",
 			MsgID: 2,
@@ -182,15 +182,15 @@ func TestPoll1(t *testing.T) {
 		Offsets: map[string]int{},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 
@@ -207,17 +207,17 @@ func TestPoll2(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 1
+	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(PollRequest{
+	body, bodyErr := json.Marshal(PollRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "poll",
 			MsgID: 2,
@@ -226,15 +226,15 @@ func TestPoll2(t *testing.T) {
 		Offsets: map[string]int{},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 
@@ -251,17 +251,17 @@ func TestPoll3(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 1
+	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(PollRequest{
+	body, bodyErr := json.Marshal(PollRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "poll",
 			MsgID: 2,
@@ -272,15 +272,15 @@ func TestPoll3(t *testing.T) {
 		},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 
@@ -297,17 +297,17 @@ func TestPoll4(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 1
+	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 3}
 	m.messages = map[string][][]int{"6": {{1, 1}, {2, 2}, {3, 3}}}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(PollRequest{
+	body, bodyErr := json.Marshal(PollRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "poll",
 			MsgID: 2,
@@ -318,15 +318,15 @@ func TestPoll4(t *testing.T) {
 		},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 
@@ -343,17 +343,17 @@ func TestListCommitedOffsets1(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 0
+	offsetsOffset = 0
 	o.offsets = map[string]int{}
 	m.messages = map[string][][]int{}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(ListCommittedOffsetsRequest{
+	body, bodyErr := json.Marshal(ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "list_committed_offsets",
 			MsgID: 2,
@@ -362,15 +362,15 @@ func TestListCommitedOffsets1(t *testing.T) {
 		Keys: []string{"6"},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 
@@ -387,17 +387,17 @@ func TestListCommitedOffsets2(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 1
+	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(ListCommittedOffsetsRequest{
+	body, bodyErr := json.Marshal(ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "list_committed_offsets",
 			MsgID: 2,
@@ -406,15 +406,15 @@ func TestListCommitedOffsets2(t *testing.T) {
 		Keys: []string{"6"},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 
@@ -431,17 +431,17 @@ func TestListCommitedOffsets3(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 1
+	offsetsOffset = 1
 	o.offsets = map[string]int{"7": 1}
 	m.messages = map[string][][]int{"7": {{1, 1}}}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(ListCommittedOffsetsRequest{
+	body, bodyErr := json.Marshal(ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "list_committed_offsets",
 			MsgID: 2,
@@ -450,15 +450,15 @@ func TestListCommitedOffsets3(t *testing.T) {
 		Keys: []string{"6"},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 
@@ -475,17 +475,17 @@ func TestListCommitedOffsets4(t *testing.T) {
 	var stdout io.ReadCloser
 
 	node, stdin, stdout = testutils.NewNode()
-	offsets_offset = 2
+	offsetsOffset = 2
 	o.offsets = map[string]int{"6": 1, "7": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}, "7": {{1, 1}}}
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(ListCommittedOffsetsRequest{
+	body, bodyErr := json.Marshal(ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "list_committed_offsets",
 			MsgID: 2,
@@ -494,15 +494,15 @@ func TestListCommitedOffsets4(t *testing.T) {
 		Keys: []string{"6"},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 

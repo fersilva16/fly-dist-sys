@@ -30,24 +30,24 @@ func TestGenerateSingle(t *testing.T) {
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(maelstrom.MessageBody{
+	body, bodyErr := json.Marshal(maelstrom.MessageBody{
 		Type:  "generate",
 		MsgID: 2,
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 }
@@ -64,34 +64,34 @@ func TestGenerateMultiple(t *testing.T) {
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(maelstrom.MessageBody{
+	body, bodyErr := json.Marshal(maelstrom.MessageBody{
 		Type:  "generate",
 		MsgID: 2,
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send1_err := testutils.Send(stdin, body)
+	send1Err := testutils.Send(stdin, body)
 
-	require.NoError(send1_err)
+	require.NoError(send1Err)
 
-	output1, read1_err := testutils.Read(stdout)
+	output1, read1Err := testutils.Read(stdout)
 
-	require.NoError(read1_err)
+	require.NoError(read1Err)
 
 	snaps.MatchSnapshot(t, output1)
 
-	send2_err := testutils.Send(stdin, body)
+	send2Err := testutils.Send(stdin, body)
 
-	require.NoError(send2_err)
+	require.NoError(send2Err)
 
-	output2, read2_err := testutils.Read(stdout)
+	output2, read2Err := testutils.Read(stdout)
 
-	require.NoError(read2_err)
+	require.NoError(read2Err)
 
 	snaps.MatchSnapshot(t, output2)
 }

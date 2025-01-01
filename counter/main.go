@@ -26,9 +26,9 @@ func main() {
 
 		ctx := context.Background()
 
-		value, read_err := kv.ReadInt(ctx, "counter")
+		value, readErr := kv.ReadInt(ctx, "counter")
 
-		if read_err != nil {
+		if readErr != nil {
 			value = 0
 		}
 
@@ -38,11 +38,11 @@ func main() {
 			return err
 		}
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type": "add_ok",
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	node.Handle("read", func(msg maelstrom.Message) error {
@@ -54,12 +54,12 @@ func main() {
 			value = 0
 		}
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type":  "read_ok",
 			"value": value,
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	if err := node.Run(); err != nil {
