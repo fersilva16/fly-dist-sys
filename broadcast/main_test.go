@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	test_utils "fly-dist-sys/testutils"
+	"fly-dist-sys/testutils"
 	"io"
 	"testing"
 
@@ -17,11 +17,11 @@ func TestTopology1(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -36,11 +36,11 @@ func TestTopology1(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -54,11 +54,11 @@ func TestTopology2(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0", "n1", "n2", "n3", "n4"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0", "n1", "n2", "n3", "n4"})
 
 	require.NoError(init_err)
 
@@ -79,11 +79,11 @@ func TestTopology2(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 

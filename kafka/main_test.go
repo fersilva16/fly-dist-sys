@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	test_utils "fly-dist-sys/testutils"
+	"fly-dist-sys/testutils"
 	"io"
 	"testing"
 
@@ -18,14 +18,14 @@ func TestSend1(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 0
 	o.offsets = map[string]int{}
 	m.messages = map[string][][]int{}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -41,11 +41,11 @@ func TestSend1(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -66,14 +66,14 @@ func TestSend2(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -89,11 +89,11 @@ func TestSend2(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -114,14 +114,14 @@ func TestSend3(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -137,11 +137,11 @@ func TestSend3(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -162,14 +162,14 @@ func TestPoll1(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 0
 	o.offsets = map[string]int{}
 	m.messages = map[string][][]int{}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -184,11 +184,11 @@ func TestPoll1(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -206,14 +206,14 @@ func TestPoll2(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -228,11 +228,11 @@ func TestPoll2(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -250,14 +250,14 @@ func TestPoll3(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -274,11 +274,11 @@ func TestPoll3(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -296,14 +296,14 @@ func TestPoll4(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 1
 	o.offsets = map[string]int{"6": 3}
 	m.messages = map[string][][]int{"6": {{1, 1}, {2, 2}, {3, 3}}}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -320,11 +320,11 @@ func TestPoll4(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -342,14 +342,14 @@ func TestListCommitedOffsets1(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 0
 	o.offsets = map[string]int{}
 	m.messages = map[string][][]int{}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -364,11 +364,11 @@ func TestListCommitedOffsets1(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -386,14 +386,14 @@ func TestListCommitedOffsets2(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -408,11 +408,11 @@ func TestListCommitedOffsets2(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -430,14 +430,14 @@ func TestListCommitedOffsets3(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 1
 	o.offsets = map[string]int{"7": 1}
 	m.messages = map[string][][]int{"7": {{1, 1}}}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -452,11 +452,11 @@ func TestListCommitedOffsets3(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
@@ -474,14 +474,14 @@ func TestListCommitedOffsets4(t *testing.T) {
 	var stdin io.WriteCloser
 	var stdout io.ReadCloser
 
-	node, stdin, stdout = test_utils.NewNode()
+	node, stdin, stdout = testutils.NewNode()
 	offsets_offset = 2
 	o.offsets = map[string]int{"6": 1, "7": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}, "7": {{1, 1}}}
 
 	go main()
 
-	init_err := test_utils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
 	require.NoError(init_err)
 
@@ -496,11 +496,11 @@ func TestListCommitedOffsets4(t *testing.T) {
 
 	require.NoError(body_err)
 
-	send_err := test_utils.Send(stdin, body)
+	send_err := testutils.Send(stdin, body)
 
 	require.NoError(send_err)
 
-	output, read_err := test_utils.Read(stdout)
+	output, read_err := testutils.Read(stdout)
 
 	require.NoError(read_err)
 
