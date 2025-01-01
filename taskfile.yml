@@ -13,27 +13,27 @@ tasks:
   test-echo:
     desc: Run echo test
     cmds:
-      - go test ./echo
+      - go test ./echo {{.CLI_ARGS}}
 
   test-uniqueids:
     desc: Run uniqueids test
     cmds:
-      - go test ./uniqueids
+      - go test ./uniqueids {{.CLI_ARGS}}
 
   test-broadcast:
     desc: Run broadcast test
     cmds:
-      - go test ./broadcast
+      - go test ./broadcast {{.CLI_ARGS}}
 
   test-counter:
     desc: Run counter test
     cmds:
-      - go test ./counter
+      - go test ./counter {{.CLI_ARGS}}
 
   test-kafka:
     desc: Run kafka test
     cmds:
-      - go test ./kafka
+      - go test ./kafka {{.CLI_ARGS}}
 
   run-all:
     desc: Run all
