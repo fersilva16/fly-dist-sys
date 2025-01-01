@@ -1,19 +1,12 @@
 
-[TestTopology1 - 1]
+[TestSingle - 1]
 {"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"topology_ok"}}
 ---
 
-[TestTopology1 - 2]
-{}
+[TestSingle - 2]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"broadcast_ok"}}
 ---
 
-[TestTopology2 - 1]
-{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"topology_ok"}}
----
-
-[TestTopology2 - 2]
-{
- "n1": {},
- "n3": {}
-}
+[TestSingle - 3]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"messages":[1],"type":"read_ok"}}
 ---

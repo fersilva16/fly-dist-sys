@@ -78,7 +78,7 @@ func InitNode(stdin io.WriteCloser, stdout io.ReadCloser, nodeId string, nodeIds
 		return err
 	}
 
-	err := Send(stdin, body)
+	err = Send(stdin, body)
 
 	if err != nil {
 		return err
