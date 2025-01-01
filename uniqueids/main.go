@@ -17,12 +17,12 @@ func main() {
 
 		count += 1
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type": "generate_ok",
 			"id":   id,
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	if err := node.Run(); err != nil {

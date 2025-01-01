@@ -21,11 +21,11 @@ func TestEcho(t *testing.T) {
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(EchoRequest{
+	body, bodyErr := json.Marshal(EchoRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "echo",
 			MsgID: 2,
@@ -34,15 +34,15 @@ func TestEcho(t *testing.T) {
 		Echo: "Please echo 1",
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 }

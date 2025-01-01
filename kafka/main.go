@@ -40,7 +40,7 @@ type Messages struct {
 }
 
 var node = maelstrom.NewNode()
-var offsets_offset = 0
+var offsetsOffset = 0
 var o = Offsets{offsets: make(map[string]int)}
 var m = Messages{messages: make(map[string][][]int)}
 
@@ -55,8 +55,8 @@ func main() {
 		o.mu.Lock()
 
 		if o.offsets[body.Key] == 0 {
-			o.offsets[body.Key] = offsets_offset * 1000
-			offsets_offset++
+			o.offsets[body.Key] = offsetsOffset * 1000
+			offsetsOffset++
 		}
 
 		o.offsets[body.Key]++
@@ -75,12 +75,12 @@ func main() {
 
 		m.mu.Unlock()
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type":   "send_ok",
 			"offset": offset,
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	node.Handle("poll", func(msg maelstrom.Message) error {
@@ -90,7 +90,7 @@ func main() {
 			return err
 		}
 
-		res_messages := make(map[string][][]int)
+		resMessages := make(map[string][][]int)
 
 		for key, offset := range body.Offsets {
 			m.mu.RLock()
@@ -103,23 +103,23 @@ func main() {
 				continue
 			}
 
-			res_messages[key] = [][]int{}
+			resMessages[key] = [][]int{}
 
 			for i := 0; i < len(msgs); i++ {
 				if msgs[i][0] < offset {
 					continue
 				}
 
-				res_messages[key] = append(res_messages[key], msgs[i])
+				resMessages[key] = append(resMessages[key], msgs[i])
 			}
 		}
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type": "poll_ok",
-			"msgs": res_messages,
+			"msgs": resMessages,
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	node.Handle("commit_offsets", func(msg maelstrom.Message) error {
@@ -137,11 +137,11 @@ func main() {
 			o.mu.Unlock()
 		}
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type": "commit_offsets_ok",
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	node.Handle("list_committed_offsets", func(msg maelstrom.Message) error {
@@ -151,7 +151,7 @@ func main() {
 			return err
 		}
 
-		res_offsets := map[string]int{}
+		resOffsets := map[string]int{}
 
 		for i := 0; i < len(body.Keys); i++ {
 			o.mu.RLock()
@@ -165,15 +165,15 @@ func main() {
 				continue
 			}
 
-			res_offsets[key] = offset
+			resOffsets[key] = offset
 		}
 
-		res_body := map[string]any{
+		resBody := map[string]any{
 			"type":    "list_committed_offsets_ok",
-			"offsets": res_offsets,
+			"offsets": resOffsets,
 		}
 
-		return node.Reply(msg, res_body)
+		return node.Reply(msg, resBody)
 	})
 
 	if err := node.Run(); err != nil {

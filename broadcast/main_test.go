@@ -21,11 +21,11 @@ func TestTopology1(t *testing.T) {
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(TopologyRequest{
+	body, bodyErr := json.Marshal(TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "topology",
 			MsgID: 2,
@@ -34,15 +34,15 @@ func TestTopology1(t *testing.T) {
 		Topology: map[string][]string{"n0": {}},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 	snaps.MatchJSON(t, neighbours)
@@ -58,11 +58,11 @@ func TestTopology2(t *testing.T) {
 
 	go main()
 
-	init_err := testutils.InitNode(stdin, stdout, "n0", []string{"n0", "n1", "n2", "n3", "n4"})
+	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0", "n1", "n2", "n3", "n4"})
 
-	require.NoError(init_err)
+	require.NoError(initErr)
 
-	body, body_err := json.Marshal(TopologyRequest{
+	body, bodyErr := json.Marshal(TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "topology",
 			MsgID: 2,
@@ -77,15 +77,15 @@ func TestTopology2(t *testing.T) {
 		},
 	})
 
-	require.NoError(body_err)
+	require.NoError(bodyErr)
 
-	send_err := testutils.Send(stdin, body)
+	sendErr := testutils.Send(stdin, body)
 
-	require.NoError(send_err)
+	require.NoError(sendErr)
 
-	output, read_err := testutils.Read(stdout)
+	output, readErr := testutils.Read(stdout)
 
-	require.NoError(read_err)
+	require.NoError(readErr)
 
 	snaps.MatchSnapshot(t, output)
 	snaps.MatchJSON(t, neighbours)
