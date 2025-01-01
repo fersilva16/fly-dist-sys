@@ -24,9 +24,9 @@ func TestSend1(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, SendRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -64,9 +64,9 @@ func TestSend2(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, SendRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -104,9 +104,9 @@ func TestSend3(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, SendRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -144,9 +144,9 @@ func TestPoll1(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, PollRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -180,9 +180,9 @@ func TestPoll2(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, PollRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -216,9 +216,9 @@ func TestPoll3(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, PollRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -254,9 +254,9 @@ func TestPoll4(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, PollRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -292,9 +292,9 @@ func TestListCommitedOffsets1(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -328,9 +328,9 @@ func TestListCommitedOffsets2(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -364,9 +364,9 @@ func TestListCommitedOffsets3(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
@@ -400,9 +400,9 @@ func TestListCommitedOffsets4(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{

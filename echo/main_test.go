@@ -20,9 +20,9 @@ func TestEcho(t *testing.T) {
 
 	go main()
 
-	initErr := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
 
-	require.NoError(initErr)
+	require.NoError(err)
 
 	output, err := testutils.RPC(stdin, stdout, EchoRequest{
 		MessageBody: maelstrom.MessageBody{
