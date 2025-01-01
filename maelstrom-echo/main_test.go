@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	test_utils "fly-dist-sys/maelstrom-test-utils"
 	"io"
 	"testing"
 
-	test_utils "github.com/fersilva16/fly-dist-sys/maelstrom-test-utils"
 	"github.com/gkampitakis/go-snaps/snaps"
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 	"github.com/stretchr/testify/require"
