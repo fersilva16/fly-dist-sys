@@ -16,15 +16,15 @@
 ---
 
 [TestMulti - 2]
-{"src":"n0","dest":"n3","body":{"type":"broadcast","message":1}}
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"broadcast_ok"}}
 ---
 
 [TestMulti - 3]
-{"src":"n0","dest":"n1","body":{"type":"broadcast","message":1}}
+{"src":"n0","dest":"n1","body":{"message":1,"msg_id":2,"type":"broadcast"}}
 ---
 
 [TestMulti - 4]
-{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"broadcast_ok"}}
+{"src":"n0","dest":"n3","body":{"message":1,"msg_id":1,"type":"broadcast"}}
 ---
 
 [TestMulti - 5]

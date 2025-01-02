@@ -59,18 +59,18 @@ tasks:
   run-broadcast:
     desc: Run broadcast test
     cmds:
-      - task: run-broadcast-single
-      - task: run-broadcast-multi
+      - task: run-broadcast-single-node
+      - task: run-broadcast-multi-node
       - task: run-broadcast-fault-tolerant
       - task: run-broadcast-efficient
 
-  run-broadcast-single:
-    desc: Run broadcast single test
+  run-broadcast-single-node:
+    desc: Run broadcast single-node test
     cmds:
       - task: build-broadcast
       - maelstrom test -w broadcast --bin ./build/broadcast --node-count 1 --time-limit 20 --rate 10
 
-  run-broadcast-multi:
+  run-broadcast-multi-node:
     desc: Run broadcast multi-node test
     cmds:
       - task: build-broadcast

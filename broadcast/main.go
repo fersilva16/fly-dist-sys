@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"slices"
+	"time"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
@@ -34,20 +35,12 @@ func main() {
 		if !slices.Contains(messages, body.Message) {
 			messages = append(messages, body.Message)
 
-			for _, neighbor := range neighbors {
-				neighborMsg := BroadcastRequest{
-					MessageBody: maelstrom.MessageBody{
-						Type: "broadcast",
-					},
-
-					Message: body.Message,
+			for _, neighborId := range neighbors {
+				if neighborId == msg.Src {
+					continue
 				}
 
-				err := node.Send(neighbor, neighborMsg)
-
-				if err != nil {
-					return err
-				}
+				go broadcast(500*time.Millisecond, neighborId, body.Message)
 			}
 		}
 
@@ -89,5 +82,29 @@ func main() {
 
 	if err := node.Run(); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func broadcast(timeout time.Duration, neighborId string, message int) {
+	replied := false
+
+	neighborMessage := BroadcastRequest{
+		MessageBody: maelstrom.MessageBody{
+			Type: "broadcast",
+		},
+
+		Message: message,
+	}
+
+	node.RPC(neighborId, neighborMessage, func(msg maelstrom.Message) error {
+		replied = true
+
+		return nil
+	})
+
+	time.Sleep(timeout)
+
+	if !replied {
+		broadcast(timeout*2, neighborId, message)
 	}
 }
