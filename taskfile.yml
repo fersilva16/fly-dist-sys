@@ -62,7 +62,8 @@ tasks:
       - task: run-broadcast-single-node
       - task: run-broadcast-multi-node
       - task: run-broadcast-fault-tolerant
-      - task: run-broadcast-efficient
+      - task: run-broadcast-efficient-i
+      - task: run-broadcast-efficient-ii
 
   run-broadcast-single-node:
     desc: Run broadcast single-node test
@@ -82,11 +83,19 @@ tasks:
       - task: build-broadcast
       - maelstrom test -w broadcast --bin ./build/broadcast --node-count 5 --time-limit 20 --rate 10 --nemesis partition
 
-  run-broadcast-efficient:
-    desc: Run broadcast efficient test
+  run-broadcast-efficient-i:
+    desc: Run broadcast efficient-i test
     cmds:
       - task: build-broadcast
       - maelstrom test -w broadcast --bin ./build/broadcast --node-count 25 --time-limit 20 --rate 100 --latency 100
+      - ./scripts/broadcast-check.sh 30 400 600
+
+  run-broadcast-efficient-ii:
+    desc: Run broadcast efficient-ii test
+    cmds:
+      - task: build-broadcast
+      - maelstrom test -w broadcast --bin ./build/broadcast --node-count 25 --time-limit 20 --rate 100 --latency 100
+      - ./scripts/broadcast-check.sh 20 1000 2000
 
   run-counter:
     desc: Run counter test

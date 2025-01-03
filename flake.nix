@@ -20,6 +20,7 @@
           buildInputs = [
               go
               go-task
+              jet
               graphviz
               gnuplot
               maelstrom-clj
