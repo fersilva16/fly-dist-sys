@@ -13,8 +13,9 @@ type AddRequest struct {
 	Delta int `json:"delta"`
 }
 
+var node = maelstrom.NewNode()
+
 func main() {
-	node := maelstrom.NewNode()
 	kv := maelstrom.NewSeqKV(node)
 
 	node.Handle("add", func(msg maelstrom.Message) error {
