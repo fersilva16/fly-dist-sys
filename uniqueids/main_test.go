@@ -3,7 +3,6 @@ package main
 import (
 	"fly-dist-sys/testutils"
 
-	"io"
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
@@ -17,23 +16,23 @@ func (clock MockClock) Now() string {
 	return "1709404427"
 }
 
-func TestGenerateSingle(t *testing.T) {
+func TestSingle(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	clock = MockClock{}
 	count = 0
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, maelstrom.MessageBody{
+	output, err := client.RPC(maelstrom.MessageBody{
 		Type:  "generate",
 		MsgID: 2,
 	})
@@ -43,19 +42,19 @@ func TestGenerateSingle(t *testing.T) {
 	snaps.MatchSnapshot(t, output)
 }
 
-func TestGenerateMultiple(t *testing.T) {
+func TestMultiple(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	clock = MockClock{}
 	count = 0
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0", "n1", "n2", "n3", "n4"})
 
 	require.NoError(err)
 
@@ -64,13 +63,13 @@ func TestGenerateMultiple(t *testing.T) {
 		MsgID: 2,
 	}
 
-	output1, err := testutils.RPC(stdin, stdout, body)
+	output1, err := client.RPC(body)
 
 	require.NoError(err)
 
 	snaps.MatchSnapshot(t, output1)
 
-	output2, err := testutils.RPC(stdin, stdout, body)
+	output2, err := client.RPC(body)
 
 	require.NoError(err)
 
