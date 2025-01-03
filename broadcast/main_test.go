@@ -2,7 +2,6 @@ package main
 
 import (
 	"fly-dist-sys/testutils"
-	"io"
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
@@ -13,18 +12,18 @@ import (
 func TestSingle(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
+	node = maelstrom.NewNode()
 
-	node, stdin, stdout = testutils.NewNode()
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
 
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	topologyOutput, err := testutils.RPC(stdin, stdout, TopologyRequest{
+	topologyOutput, err := client.RPC(TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "topology",
 			MsgID: 2,
@@ -37,7 +36,7 @@ func TestSingle(t *testing.T) {
 
 	snaps.MatchSnapshot(t, topologyOutput)
 
-	broadcastOutput, err := testutils.RPC(stdin, stdout, BroadcastRequest{
+	broadcastOutput, err := client.RPC(BroadcastRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "broadcast",
 			MsgID: 2,
@@ -50,7 +49,7 @@ func TestSingle(t *testing.T) {
 
 	snaps.MatchSnapshot(t, broadcastOutput)
 
-	readOutput, err := testutils.RPC(stdin, stdout, maelstrom.MessageBody{
+	readOutput, err := client.RPC(maelstrom.MessageBody{
 		Type:  "read",
 		MsgID: 2,
 	})
@@ -63,18 +62,18 @@ func TestSingle(t *testing.T) {
 func TestMulti(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
+	node = maelstrom.NewNode()
 
-	node, stdin, stdout = testutils.NewNode()
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
 
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0", "n1", "n2", "n3", "n4"})
+	err := client.InitNode("n0", []string{"n0", "n1", "n2", "n3", "n4"})
 
 	require.NoError(err)
 
-	topologyOutput, err := testutils.RPC(stdin, stdout, TopologyRequest{
+	topologyOutput, err := client.RPC(TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "topology",
 			MsgID: 2,
@@ -93,10 +92,10 @@ func TestMulti(t *testing.T) {
 
 	snaps.MatchSnapshot(t, topologyOutput)
 
-	broadcastOutput, err := testutils.RPC(stdin, stdout, BroadcastRequest{
+	broadcastOutput, err := client.RPC(BroadcastRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "broadcast",
-			MsgID: 2,
+			MsgID: 3,
 		},
 
 		Message: 1,
@@ -106,21 +105,21 @@ func TestMulti(t *testing.T) {
 
 	snaps.MatchSnapshot(t, broadcastOutput)
 
-	broadcastOutputN3, err := testutils.Read(stdout)
+	broadcastOutputN3, err := link.Read()
 
 	require.NoError(err)
 
 	snaps.MatchSnapshot(t, broadcastOutputN3)
 
-	broadcastOutputN1, err := testutils.Read(stdout)
+	broadcastOutputN1, err := link.Read()
 
 	require.NoError(err)
 
 	snaps.MatchSnapshot(t, broadcastOutputN1)
 
-	readOutput, err := testutils.RPC(stdin, stdout, maelstrom.MessageBody{
+	readOutput, err := client.RPC(maelstrom.MessageBody{
 		Type:  "read",
-		MsgID: 2,
+		MsgID: 4,
 	})
 
 	require.NoError(err)

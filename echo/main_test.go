@@ -2,7 +2,6 @@ package main
 
 import (
 	"fly-dist-sys/testutils"
-	"io"
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
@@ -13,18 +12,18 @@ import (
 func TestEcho(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
+	node = maelstrom.NewNode()
 
-	node, stdin, stdout = testutils.NewNode()
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
 
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, EchoRequest{
+	output, err := client.RPC(EchoRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "echo",
 			MsgID: 2,

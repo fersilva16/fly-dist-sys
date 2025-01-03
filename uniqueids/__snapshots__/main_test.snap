@@ -1,12 +1,12 @@
 
-[TestGenerateSingle - 1]
+[TestSingle - 1]
 {"src":"n0","dest":"c0","body":{"id":"n017094044270","in_reply_to":2,"type":"generate_ok"}}
 ---
 
-[TestGenerateMultiple - 1]
+[TestMultiple - 1]
 {"src":"n0","dest":"c0","body":{"id":"n017094044270","in_reply_to":2,"type":"generate_ok"}}
 ---
 
-[TestGenerateMultiple - 2]
+[TestMultiple - 2]
 {"src":"n0","dest":"c0","body":{"id":"n017094044271","in_reply_to":2,"type":"generate_ok"}}
 ---

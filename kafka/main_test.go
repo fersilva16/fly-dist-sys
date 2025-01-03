@@ -2,7 +2,6 @@ package main
 
 import (
 	"fly-dist-sys/testutils"
-	"io"
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
@@ -14,21 +13,21 @@ import (
 func TestSend1(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 0
 	o.offsets = map[string]int{}
 	m.messages = map[string][][]int{}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, SendRequest{
+	output, err := client.RPC(SendRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "send",
 			MsgID: 2,
@@ -54,21 +53,21 @@ func TestSend1(t *testing.T) {
 func TestSend2(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, SendRequest{
+	output, err := client.RPC(SendRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "send",
 			MsgID: 2,
@@ -94,21 +93,21 @@ func TestSend2(t *testing.T) {
 func TestSend3(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, SendRequest{
+	output, err := client.RPC(SendRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "send",
 			MsgID: 2,
@@ -134,21 +133,21 @@ func TestSend3(t *testing.T) {
 func TestPoll1(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 0
 	o.offsets = map[string]int{}
 	m.messages = map[string][][]int{}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, PollRequest{
+	output, err := client.RPC(PollRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "poll",
 			MsgID: 2,
@@ -170,21 +169,21 @@ func TestPoll1(t *testing.T) {
 func TestPoll2(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, PollRequest{
+	output, err := client.RPC(PollRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "poll",
 			MsgID: 2,
@@ -206,21 +205,21 @@ func TestPoll2(t *testing.T) {
 func TestPoll3(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, PollRequest{
+	output, err := client.RPC(PollRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "poll",
 			MsgID: 2,
@@ -244,21 +243,21 @@ func TestPoll3(t *testing.T) {
 func TestPoll4(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 3}
 	m.messages = map[string][][]int{"6": {{1, 1}, {2, 2}, {3, 3}}}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, PollRequest{
+	output, err := client.RPC(PollRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "poll",
 			MsgID: 2,
@@ -282,21 +281,21 @@ func TestPoll4(t *testing.T) {
 func TestListCommitedOffsets1(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 0
 	o.offsets = map[string]int{}
 	m.messages = map[string][][]int{}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, ListCommittedOffsetsRequest{
+	output, err := client.RPC(ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "list_committed_offsets",
 			MsgID: 2,
@@ -318,21 +317,21 @@ func TestListCommitedOffsets1(t *testing.T) {
 func TestListCommitedOffsets2(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 1
 	o.offsets = map[string]int{"6": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, ListCommittedOffsetsRequest{
+	output, err := client.RPC(ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "list_committed_offsets",
 			MsgID: 2,
@@ -354,21 +353,21 @@ func TestListCommitedOffsets2(t *testing.T) {
 func TestListCommitedOffsets3(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 1
 	o.offsets = map[string]int{"7": 1}
 	m.messages = map[string][][]int{"7": {{1, 1}}}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, ListCommittedOffsetsRequest{
+	output, err := client.RPC(ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "list_committed_offsets",
 			MsgID: 2,
@@ -390,21 +389,21 @@ func TestListCommitedOffsets3(t *testing.T) {
 func TestListCommitedOffsets4(t *testing.T) {
 	require := require.New(t)
 
-	var stdin io.WriteCloser
-	var stdout io.ReadCloser
-
-	node, stdin, stdout = testutils.NewNode()
+	node = maelstrom.NewNode()
 	offsetsOffset = 2
 	o.offsets = map[string]int{"6": 1, "7": 1}
 	m.messages = map[string][][]int{"6": {{1, 1}}, "7": {{1, 1}}}
 
+	link := testutils.NewLink(node)
+	client := testutils.NewClient("c0", link)
+
 	go main()
 
-	err := testutils.InitNode(stdin, stdout, "n0", []string{"n0"})
+	err := client.InitNode("n0", []string{"n0"})
 
 	require.NoError(err)
 
-	output, err := testutils.RPC(stdin, stdout, ListCommittedOffsetsRequest{
+	output, err := client.RPC(ListCommittedOffsetsRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "list_committed_offsets",
 			MsgID: 2,
