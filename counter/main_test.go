@@ -39,7 +39,7 @@ func Test(t *testing.T) {
 
 	require.NoError(err)
 
-	err = kv.HandleCAS("counter", 0, 1, true)
+	err = kv.HandleCAS("counter", float64(0), float64(1), true)
 
 	require.NoError(err)
 

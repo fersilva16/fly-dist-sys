@@ -98,8 +98,12 @@ func (kv *KV) HandleRead(key string, value any) error {
 		return err
 	}
 
-	if body.Type != "read" || body.Key != key {
-		return fmt.Errorf("invalid message: %s", msg.Body)
+	if body.Type != "read" {
+		return fmt.Errorf("invalid type: %s (expected read)", body.Type)
+	}
+
+	if body.Key != key {
+		return fmt.Errorf("invalid key: %s (expected %s)", body.Key, key)
 	}
 
 	err = kv.Write(KVReadOKMessageBody{
@@ -131,14 +135,22 @@ func (kv *KV) HandleWrite(key string, value any) error {
 		return err
 	}
 
-	var body KVReadMessageBody
+	var body KVWriteMessageBody
 
 	if err := json.Unmarshal(msg.Body, &body); err != nil {
 		return err
 	}
 
-	if body.Type != "write" || body.Key != key {
-		return fmt.Errorf("invalid message: %s", msg.Body)
+	if body.Type != "write" {
+		return fmt.Errorf("invalid type: %s (expected write)", body.Type)
+	}
+
+	if body.Key != key {
+		return fmt.Errorf("invalid key: %s (expected %s)", body.Key, key)
+	}
+
+	if body.Value != value {
+		return fmt.Errorf("invalid value: %v (expected %v)", body.Value, value)
 	}
 
 	err = kv.Write(maelstrom.MessageBody{
@@ -166,26 +178,35 @@ func (kv *KV) HandleCAS(key string, from, to any, createIfNotExists bool) error 
 		return err
 	}
 
-	var body KVReadMessageBody
+	var body KVCASMessageBody
 
 	if err := json.Unmarshal(msg.Body, &body); err != nil {
 		return err
 	}
 
-	if body.Type != "cas" || body.Key != key {
-		return fmt.Errorf("invalid message: %s", msg.Body)
+	if body.Type != "cas" {
+		return fmt.Errorf("invalid type: %s (expected cas)", body.Type)
 	}
 
-	err = kv.Write(KVCASMessageBody{
-		MessageBody: maelstrom.MessageBody{
-			Type:      "cas_ok",
-			InReplyTo: body.MsgID,
-		},
+	if body.Key != key {
+		return fmt.Errorf("invalid key: %s (expected %s)", body.Key, key)
+	}
 
-		Key:               key,
-		From:              from,
-		To:                to,
-		CreateIfNotExists: createIfNotExists,
+	if body.From != from {
+		return fmt.Errorf("invalid from: %v (expected %v)", body.From, from)
+	}
+
+	if body.To != to {
+		return fmt.Errorf("invalid to: %v (expected %v)", body.To, to)
+	}
+
+	if body.CreateIfNotExists != createIfNotExists {
+		return fmt.Errorf("invalid create_if_not_exists: %t (expected %t)", body.CreateIfNotExists, createIfNotExists)
+	}
+
+	err = kv.Write(maelstrom.MessageBody{
+		Type:      "cas_ok",
+		InReplyTo: body.MsgID,
 	})
 
 	if err != nil {
