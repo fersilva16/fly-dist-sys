@@ -2,22 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	types "fly-dist-sys/broadcast"
 	"log"
 	"slices"
-	"time"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
-
-type BroadcastRequest struct {
-	maelstrom.MessageBody
-	Message int `json:"message"`
-}
-
-type TopologyRequest struct {
-	maelstrom.MessageBody
-	Topology map[string][]string `json:"topology"`
-}
 
 var node = maelstrom.NewNode()
 
@@ -26,7 +16,7 @@ func main() {
 	neighbors := []string{}
 
 	node.Handle("broadcast", func(msg maelstrom.Message) error {
-		var body BroadcastRequest
+		var body types.BroadcastRequest
 
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err
@@ -40,7 +30,15 @@ func main() {
 					continue
 				}
 
-				go broadcast(500*time.Millisecond, neighborId, body.Message)
+				neighborMessage := types.BroadcastRequest{
+					MessageBody: maelstrom.MessageBody{
+						Type: "broadcast",
+					},
+
+					Message: body.Message,
+				}
+
+				node.Send(neighborId, neighborMessage)
 			}
 		}
 
@@ -65,7 +63,7 @@ func main() {
 	})
 
 	node.Handle("topology", func(msg maelstrom.Message) error {
-		var body TopologyRequest
+		var body types.TopologyRequest
 
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err
@@ -82,29 +80,5 @@ func main() {
 
 	if err := node.Run(); err != nil {
 		log.Fatal(err)
-	}
-}
-
-func broadcast(timeout time.Duration, neighborId string, message int) {
-	replied := false
-
-	neighborMessage := BroadcastRequest{
-		MessageBody: maelstrom.MessageBody{
-			Type: "broadcast",
-		},
-
-		Message: message,
-	}
-
-	node.RPC(neighborId, neighborMessage, func(msg maelstrom.Message) error {
-		replied = true
-
-		return nil
-	})
-
-	time.Sleep(timeout)
-
-	if !replied {
-		broadcast(timeout*2, neighborId, message)
 	}
 }

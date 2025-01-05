@@ -23,7 +23,36 @@ tasks:
   test-broadcast:
     desc: Run broadcast test
     cmds:
-      - go test ./broadcast {{.CLI_ARGS}}
+      - task: test-broadcast-single-node
+      - task: test-broadcast-multi-node
+      - task: test-broadcast-fault-tolerant
+      - task: test-broadcast-efficient-i
+      - task: test-broadcast-efficient-ii
+
+  test-broadcast-single-node:
+    desc: Run broadcast single-node test
+    cmds:
+      - go test ./broadcast/a {{.CLI_ARGS}}
+
+  test-broadcast-multi-node:
+    desc: Run broadcast multi-node test
+    cmds:
+      - go test ./broadcast/b {{.CLI_ARGS}}
+
+  test-broadcast-fault-tolerant:
+    desc: Run broadcast fault-tolerant test
+    cmds:
+      - go test ./broadcast/c {{.CLI_ARGS}}
+
+  test-broadcast-efficient-i:
+    desc: Run broadcast efficient-i test
+    cmds:
+      - go test ./broadcast/d {{.CLI_ARGS}}
+
+  test-broadcast-efficient-ii:
+    desc: Run broadcast efficient-ii test
+    cmds:
+      - go test ./broadcast/e {{.CLI_ARGS}}
 
   test-counter:
     desc: Run counter test
@@ -68,33 +97,59 @@ tasks:
   run-broadcast-single-node:
     desc: Run broadcast single-node test
     cmds:
-      - task: build-broadcast
-      - maelstrom test -w broadcast --bin ./build/broadcast --node-count 1 --time-limit 20 --rate 10
+      - task: build-broadcast-single-node
+      - maelstrom test -w broadcast --bin ./build/broadcast/a --node-count 1 --time-limit 20 --rate 10
 
   run-broadcast-multi-node:
     desc: Run broadcast multi-node test
     cmds:
-      - task: build-broadcast
-      - maelstrom test -w broadcast --bin ./build/broadcast --node-count 5 --time-limit 20 --rate 10
+      - task: build-broadcast-multi-node
+      - maelstrom test -w broadcast --bin ./build/broadcast/b --node-count 5 --time-limit 20 --rate 10
 
   run-broadcast-fault-tolerant:
     desc: Run broadcast fault-tolerant test
     cmds:
-      - task: build-broadcast
-      - maelstrom test -w broadcast --bin ./build/broadcast --node-count 5 --time-limit 20 --rate 10 --nemesis partition
+      - task: build-broadcast-fault-tolerant
+      - maelstrom test -w broadcast --bin ./build/broadcast/c --node-count 5 --time-limit 20 --rate 10 --nemesis partition
 
   run-broadcast-efficient-i:
     desc: Run broadcast efficient-i test
     cmds:
-      - task: build-broadcast
-      - maelstrom test -w broadcast --bin ./build/broadcast --node-count 25 --time-limit 20 --rate 100 --latency 100
+      - task: run-broadcast-efficient-i1
+      - task: run-broadcast-efficient-i2
+
+  run-broadcast-efficient-i1:
+    desc: Run broadcast efficient-i1 test
+    cmds:
+      - task: build-broadcast-efficient-i
+      - maelstrom test -w broadcast --bin ./build/broadcast/d --node-count 25 --time-limit 20 --rate 100 --latency 100
+      - ./scripts/broadcast-check.sh 30 400 600
+
+  run-broadcast-efficient-i2:
+    desc: Run broadcast efficient-i2 test
+    cmds:
+      - task: build-broadcast-efficient-i
+      - maelstrom test -w broadcast --bin ./build/broadcast/d --node-count 25 --time-limit 20 --rate 100 --latency 100 --nemesis partition
       - ./scripts/broadcast-check.sh 30 400 600
 
   run-broadcast-efficient-ii:
     desc: Run broadcast efficient-ii test
     cmds:
-      - task: build-broadcast
-      - maelstrom test -w broadcast --bin ./build/broadcast --node-count 25 --time-limit 20 --rate 100 --latency 100
+      - task: run-broadcast-efficient-ii1
+      - task: run-broadcast-efficient-ii2
+
+  run-broadcast-efficient-ii1:
+    desc: Run broadcast efficient-ii1 test
+    cmds:
+      - task: build-broadcast-efficient-ii
+      - maelstrom test -w broadcast --bin ./build/broadcast/e --node-count 25 --time-limit 20 --rate 100 --latency 100
+      - ./scripts/broadcast-check.sh 20 1000 2000
+
+  run-broadcast-efficient-ii2:
+    desc: Run broadcast efficient-ii2 test
+    cmds:
+      - task: build-broadcast-efficient-ii
+      - maelstrom test -w broadcast --bin ./build/broadcast/e --node-count 25 --time-limit 20 --rate 100 --latency 100 --nemesis partition
       - ./scripts/broadcast-check.sh 20 1000 2000
 
   run-counter:
@@ -125,7 +180,7 @@ tasks:
     generates:
       - build/echo
     cmds:
-      - go build -o ./build ./echo
+      - go build -o ./build/echo ./echo
 
   build-uniqueids:
     desc: Build uniqueids test
@@ -134,16 +189,61 @@ tasks:
     generates:
       - build/uniqueids
     cmds:
-      - go build -o ./build ./uniqueids
+      - go build -o ./build/uniqueids ./uniqueids
 
   build-broadcast:
     desc: Build broadcast test
-    sources:
-      - broadcast/**/*
-    generates:
-      - build/broadcast
     cmds:
-      - go build -o ./build ./broadcast
+      - task: build-broadcast-single-node
+      - task: build-broadcast-multi-node
+      - task: build-broadcast-fault-tolerant
+      - task: build-broadcast-efficient-i
+      - task: build-broadcast-efficient-ii
+
+  build-broadcast-single-node:
+    desc: Build broadcast single-node test
+    sources:
+      - broadcast/a/**/*
+    generates:
+      - build/broadcast/a
+    cmds:
+      - go build -o ./build/broadcast/a ./broadcast/a
+
+  build-broadcast-multi-node:
+    desc: Build broadcast multi-node test
+    sources:
+      - broadcast/b/**/*
+    generates:
+      - build/broadcast/b
+    cmds:
+      - go build -o ./build/broadcast/b ./broadcast/b
+
+  build-broadcast-fault-tolerant:
+    desc: Build broadcast fault-tolerant test
+    sources:
+      - broadcast/c/**/*
+    generates:
+      - build/broadcast/c
+    cmds:
+      - go build -o ./build/broadcast/c ./broadcast/c
+
+  build-broadcast-efficient-i:
+    desc: Build broadcast efficient-i test
+    sources:
+      - broadcast/d/**/*
+    generates:
+      - build/broadcast/d
+    cmds:
+      - go build -o ./build/broadcast/d ./broadcast/d
+
+  build-broadcast-efficient-ii:
+    desc: Build broadcast efficient-ii test
+    sources:
+      - broadcast/e/**/*
+    generates:
+      - build/broadcast/e
+    cmds:
+      - go build -o ./build/broadcast/e ./broadcast/e
 
   build-counter:
     desc: Build counter test
@@ -152,7 +252,7 @@ tasks:
     generates:
       - build/counter
     cmds:
-      - go build -o ./build ./counter
+      - go build -o ./build/counter ./counter
 
   build-kafka:
     desc: Build kafka test
@@ -161,4 +261,4 @@ tasks:
     generates:
       - build/kafka
     cmds:
-      - go build -o ./build ./kafka
+      - go build -o ./build/kafka ./kafka

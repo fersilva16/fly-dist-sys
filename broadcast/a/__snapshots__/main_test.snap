@@ -1,0 +1,12 @@
+
+[Test - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"topology_ok"}}
+---
+
+[Test - 2]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"broadcast_ok"}}
+---
+
+[Test - 3]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"messages":[1],"type":"read_ok"}}
+---
