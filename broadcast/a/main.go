@@ -2,12 +2,22 @@ package main
 
 import (
 	"encoding/json"
-	types "fly-dist-sys/broadcast"
+
 	"log"
 	"slices"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
+
+type BroadcastRequest struct {
+	maelstrom.MessageBody
+	Message int `json:"message"`
+}
+
+type TopologyRequest struct {
+	maelstrom.MessageBody
+	Topology map[string][]string `json:"topology"`
+}
 
 var node = maelstrom.NewNode()
 
@@ -15,7 +25,7 @@ func main() {
 	messages := []int{}
 
 	node.Handle("broadcast", func(msg maelstrom.Message) error {
-		var body types.BroadcastRequest
+		var body BroadcastRequest
 
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err
@@ -46,7 +56,7 @@ func main() {
 	})
 
 	node.Handle("topology", func(msg maelstrom.Message) error {
-		var body types.TopologyRequest
+		var body TopologyRequest
 
 		if err := json.Unmarshal(msg.Body, &body); err != nil {
 			return err
