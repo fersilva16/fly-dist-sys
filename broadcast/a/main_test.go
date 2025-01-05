@@ -1,7 +1,6 @@
 package main
 
 import (
-	types "fly-dist-sys/broadcast"
 	"fly-dist-sys/testutils"
 	"testing"
 
@@ -24,7 +23,7 @@ func Test(t *testing.T) {
 
 	require.NoError(err)
 
-	topologyOutput, err := client.RPC(types.TopologyRequest{
+	topologyOutput, err := client.RPC(TopologyRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "topology",
 			MsgID: 2,
@@ -37,7 +36,7 @@ func Test(t *testing.T) {
 
 	snaps.MatchSnapshot(t, topologyOutput)
 
-	broadcastOutput, err := client.RPC(types.BroadcastRequest{
+	broadcastOutput, err := client.RPC(BroadcastRequest{
 		MessageBody: maelstrom.MessageBody{
 			Type:  "broadcast",
 			MsgID: 2,
