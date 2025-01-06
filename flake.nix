@@ -1,5 +1,5 @@
 {
-  description = "Fly.io's distributed systems challenges";
+  description = "Fly.io's distributed system challenges";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
