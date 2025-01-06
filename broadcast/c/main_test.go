@@ -61,11 +61,31 @@ func Test(t *testing.T) {
 
 	snaps.MatchSnapshot(t, broadcastOutputN3)
 
+	err = client.Write(maelstrom.MessageBody{
+		Type:      "broadcast_ok",
+		InReplyTo: 1,
+	})
+
+	require.NoError(err)
+
 	broadcastOutputN1, err := link.Read()
 
 	require.NoError(err)
 
 	snaps.MatchSnapshot(t, broadcastOutputN1)
+
+	retryOutputN1, err := link.Read()
+
+	require.NoError(err)
+
+	snaps.MatchSnapshot(t, retryOutputN1)
+
+	err = client.Write(maelstrom.MessageBody{
+		Type:      "broadcast_ok",
+		InReplyTo: 3,
+	})
+
+	require.NoError(err)
 
 	readOutput, err := client.RPC(maelstrom.MessageBody{
 		Type:  "read",

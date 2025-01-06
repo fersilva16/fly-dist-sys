@@ -8,13 +8,17 @@
 ---
 
 [Test - 3]
-{"src":"n0","dest":"n1","body":{"message":1,"msg_id":1,"type":"broadcast"}}
+{"src":"n0","dest":"n1","body":{"message":1,"msg_id":2,"type":"broadcast"}}
 ---
 
 [Test - 4]
-{"src":"n0","dest":"n3","body":{"message":1,"msg_id":2,"type":"broadcast"}}
+{"src":"n0","dest":"n3","body":{"message":1,"msg_id":1,"type":"broadcast"}}
 ---
 
 [Test - 5]
+{"src":"n0","dest":"n1","body":{"message":1,"msg_id":3,"type":"broadcast"}}
+---
+
+[Test - 6]
 {"src":"n0","dest":"c0","body":{"in_reply_to":4,"messages":[1],"type":"read_ok"}}
 ---
