@@ -1,4 +1,4 @@
-module fly-dist-sys/echo
+module gossip-gloomers/echo
 
 go 1.23
 

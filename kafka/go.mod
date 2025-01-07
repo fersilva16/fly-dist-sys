@@ -1,4 +1,4 @@
-module fly-dist-sys/kafka
+module gossip-gloomers/kafka
 
 go 1.23
 

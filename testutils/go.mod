@@ -1,4 +1,4 @@
-module fly-dist-sys/testutils
+module gossip-gloomers/testutils
 
 go 1.23
 

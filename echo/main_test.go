@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fly-dist-sys/testutils"
+	"gossip-gloomers/testutils"
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
