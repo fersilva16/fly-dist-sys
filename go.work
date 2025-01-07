@@ -7,4 +7,5 @@ use (
 	./kafka
 	./testutils
 	./uniqueids
+	./utils
 )

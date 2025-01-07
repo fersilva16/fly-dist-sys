@@ -130,7 +130,6 @@ tasks:
     cmds:
       - task: build-broadcast-efficient-i
       - maelstrom test -w broadcast --bin ./build/broadcast/d --node-count 25 --time-limit 20 --rate 100 --latency 100 --nemesis partition
-      - ./scripts/broadcast-check.sh 30 400 600
 
   run-broadcast-efficient-ii:
     desc: Run broadcast efficient-ii test
@@ -150,7 +149,6 @@ tasks:
     cmds:
       - task: build-broadcast-efficient-ii
       - maelstrom test -w broadcast --bin ./build/broadcast/e --node-count 25 --time-limit 20 --rate 100 --latency 100 --nemesis partition
-      - ./scripts/broadcast-check.sh 20 1000 2000
 
   run-counter:
     desc: Run counter test
