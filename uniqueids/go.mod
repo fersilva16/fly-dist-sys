@@ -1,4 +1,4 @@
-module fly-dist-sys/uniqueids
+module gossip-gloomers/uniqueids
 
 go 1.23
 

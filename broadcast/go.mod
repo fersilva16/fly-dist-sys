@@ -1,4 +1,4 @@
-module fly-dist-sys/broadcast
+module gossip-gloomers/broadcast
 
 go 1.23
 

@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fly-dist-sys/utils"
 	"fmt"
+	"gossip-gloomers/utils"
 	"os"
 	"time"
 

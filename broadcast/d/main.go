@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fly-dist-sys/utils"
+	"gossip-gloomers/utils"
 
 	"log"
 

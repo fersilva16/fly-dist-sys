@@ -1,4 +1,4 @@
-module fly-dist-sys/counter
+module gossip-gloomers/counter
 
 go 1.23
 
