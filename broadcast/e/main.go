@@ -32,7 +32,7 @@ var broadcastInterval = 1500 * time.Millisecond // 1.5s
 
 func main() {
 	set := utils.NewSet[int]()
-	broadcast := NewBroadcaster(node, broadcastInterval)
+	broadcast := NewBroadcaster(node, set, broadcastInterval)
 
 	node.Handle("broadcast", func(msg maelstrom.Message) error {
 		var body BroadcastRequest
