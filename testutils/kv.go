@@ -215,3 +215,56 @@ func (kv *KV) HandleCAS(key string, from, to any, createIfNotExists bool) error 
 
 	return nil
 }
+
+func (kv *KV) HandleCASConflict(key string, from, to any, createIfNotExists bool) error {
+	output, err := kv.Read()
+
+	if err != nil {
+		return err
+	}
+
+	var msg maelstrom.Message
+
+	if err := json.Unmarshal([]byte(output), &msg); err != nil {
+		return err
+	}
+
+	var body KVCASMessageBody
+
+	if err := json.Unmarshal(msg.Body, &body); err != nil {
+		return err
+	}
+
+	if body.Type != "cas" {
+		return fmt.Errorf("invalid type: %s (expected cas)", body.Type)
+	}
+
+	if body.Key != key {
+		return fmt.Errorf("invalid key: %s (expected %s)", body.Key, key)
+	}
+
+	if body.From != from {
+		return fmt.Errorf("invalid from: %v (expected %v)", body.From, from)
+	}
+
+	if body.To != to {
+		return fmt.Errorf("invalid to: %v (expected %v)", body.To, to)
+	}
+
+	if body.CreateIfNotExists != createIfNotExists {
+		return fmt.Errorf("invalid create_if_not_exists: %t (expected %t)", body.CreateIfNotExists, createIfNotExists)
+	}
+
+	err = kv.Write(maelstrom.MessageBody{
+		Type:      "error",
+		Code:      22,
+		Text:      fmt.Sprintf("current value MOCKED is not %d", body.From),
+		InReplyTo: body.MsgID,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

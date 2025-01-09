@@ -6,3 +6,11 @@
 [Test - 2]
 {"src":"n0","dest":"c0","body":{"in_reply_to":3,"type":"read_ok","value":1}}
 ---
+
+[TestRetry - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"type":"add_ok"}}
+---
+
+[TestRetry - 2]
+{"src":"n0","dest":"c0","body":{"in_reply_to":3,"type":"read_ok","value":1}}
+---

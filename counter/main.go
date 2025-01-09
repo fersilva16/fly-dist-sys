@@ -27,23 +27,23 @@ func main() {
 
 		ctx := context.Background()
 
-		value, err := kv.ReadInt(ctx, "counter")
+		for {
+			value, err := kv.ReadInt(ctx, "counter")
 
-		if err != nil {
-			value = 0
+			if err != nil {
+				value = 0
+			}
+
+			err = kv.CompareAndSwap(ctx, "counter", value, value+body.Delta, true)
+
+			if err == nil {
+				resBody := map[string]any{
+					"type": "add_ok",
+				}
+
+				return node.Reply(msg, resBody)
+			}
 		}
-
-		err = kv.CompareAndSwap(ctx, "counter", value, value+body.Delta, true)
-
-		if err != nil {
-			return err
-		}
-
-		resBody := map[string]any{
-			"type": "add_ok",
-		}
-
-		return node.Reply(msg, resBody)
 	})
 
 	node.Handle("read", func(msg maelstrom.Message) error {
