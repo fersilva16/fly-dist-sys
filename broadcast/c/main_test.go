@@ -2,6 +2,7 @@ package main
 
 import (
 	"gossip-gloomers/testutils"
+	"sort"
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
@@ -55,11 +56,22 @@ func Test(t *testing.T) {
 
 	snaps.MatchSnapshot(t, broadcastOutput)
 
-	broadcastOutputN3, err := link.Read()
+	broadcastOutput1, err := link.Read()
 
 	require.NoError(err)
 
-	snaps.MatchSnapshot(t, broadcastOutputN3)
+	broadcastOutput3, err := link.Read()
+
+	require.NoError(err)
+
+	broadcastOutputs := []string{broadcastOutput1, broadcastOutput3}
+
+	// ensure consistency
+	sort.Strings(broadcastOutputs)
+
+	for _, gossipOutput := range broadcastOutputs {
+		snaps.MatchSnapshot(t, gossipOutput)
+	}
 
 	err = client.Write(maelstrom.MessageBody{
 		Type:      "broadcast_ok",
@@ -67,12 +79,6 @@ func Test(t *testing.T) {
 	})
 
 	require.NoError(err)
-
-	broadcastOutputN1, err := link.Read()
-
-	require.NoError(err)
-
-	snaps.MatchSnapshot(t, broadcastOutputN1)
 
 	retryOutputN1, err := link.Read()
 

@@ -8,19 +8,19 @@
 ---
 
 [Test - 3]
-{"src":"n0","dest":"n2","body":{"type":"gossip","messages":[1]}}
----
-
-[Test - 4]
-{"src":"n0","dest":"n4","body":{"type":"gossip","messages":[1]}}
----
-
-[Test - 5]
 {"src":"n0","dest":"n1","body":{"type":"gossip","messages":[1]}}
 ---
 
-[Test - 6]
+[Test - 4]
+{"src":"n0","dest":"n2","body":{"type":"gossip","messages":[1]}}
+---
+
+[Test - 5]
 {"src":"n0","dest":"n3","body":{"type":"gossip","messages":[1]}}
+---
+
+[Test - 6]
+{"src":"n0","dest":"n4","body":{"type":"gossip","messages":[1]}}
 ---
 
 [Test - 7]
