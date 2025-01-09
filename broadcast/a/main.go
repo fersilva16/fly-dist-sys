@@ -19,6 +19,11 @@ type TopologyRequest struct {
 	Topology map[string][]string `json:"topology"`
 }
 
+type ReadResponse struct {
+	maelstrom.MessageBody
+	Messages []int `json:"messages"`
+}
+
 var node = maelstrom.NewNode()
 
 func main() {
@@ -35,8 +40,8 @@ func main() {
 			messages = append(messages, body.Message)
 		}
 
-		resBody := map[string]any{
-			"type": "broadcast_ok",
+		resBody := maelstrom.MessageBody{
+			Type: "broadcast_ok",
 		}
 
 		return node.Reply(msg, resBody)
@@ -47,9 +52,12 @@ func main() {
 	})
 
 	node.Handle("read", func(msg maelstrom.Message) error {
-		resBody := map[string]any{
-			"type":     "read_ok",
-			"messages": messages,
+		resBody := ReadResponse{
+			MessageBody: maelstrom.MessageBody{
+				Type: "read_ok",
+			},
+
+			Messages: messages,
 		}
 
 		return node.Reply(msg, resBody)
@@ -62,8 +70,8 @@ func main() {
 			return err
 		}
 
-		resBody := map[string]any{
-			"type": "topology_ok",
+		resBody := maelstrom.MessageBody{
+			Type: "topology_ok",
 		}
 
 		return node.Reply(msg, resBody)

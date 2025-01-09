@@ -13,6 +13,11 @@ type AddRequest struct {
 	Delta int `json:"delta"`
 }
 
+type ReadResponse struct {
+	maelstrom.MessageBody
+	Value int `json:"value"`
+}
+
 var node = maelstrom.NewNode()
 
 func main() {
@@ -37,8 +42,8 @@ func main() {
 			err = kv.CompareAndSwap(ctx, "counter", value, value+body.Delta, true)
 
 			if err == nil {
-				resBody := map[string]any{
-					"type": "add_ok",
+				resBody := maelstrom.MessageBody{
+					Type: "add_ok",
 				}
 
 				return node.Reply(msg, resBody)
@@ -55,9 +60,12 @@ func main() {
 			value = 0
 		}
 
-		resBody := map[string]any{
-			"type":  "read_ok",
-			"value": value,
+		resBody := ReadResponse{
+			MessageBody: maelstrom.MessageBody{
+				Type: "read_ok",
+			},
+
+			Value: value,
 		}
 
 		return node.Reply(msg, resBody)
