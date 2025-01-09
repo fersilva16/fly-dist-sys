@@ -1,0 +1,86 @@
+package main
+
+import (
+	"encoding/json"
+	"log"
+
+	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
+)
+
+type AddRequest struct {
+	maelstrom.MessageBody
+	Delta int `json:"delta"`
+}
+
+type PropagateRequest struct {
+	maelstrom.MessageBody
+	Count int `json:"count"`
+}
+
+var node = maelstrom.NewNode()
+
+func main() {
+	crdt := NewCRDT()
+	count := 0
+
+	node.Handle("add", func(msg maelstrom.Message) error {
+		var body AddRequest
+
+		if err := json.Unmarshal(msg.Body, &body); err != nil {
+			return err
+		}
+
+		count += body.Delta
+
+		for _, neighbor := range node.NodeIDs() {
+			if neighbor == node.ID() {
+				continue
+			}
+
+			neighborMessage := PropagateRequest{
+				MessageBody: maelstrom.MessageBody{
+					Type: "propagate",
+				},
+
+				Count: count,
+			}
+
+			go func() {
+				node.Send(neighbor, neighborMessage)
+			}()
+		}
+
+		resBody := map[string]any{
+			"type": "add_ok",
+		}
+
+		return node.Reply(msg, resBody)
+	})
+
+	node.Handle("propagate", func(msg maelstrom.Message) error {
+		var body PropagateRequest
+
+		if err := json.Unmarshal(msg.Body, &body); err != nil {
+			return err
+		}
+
+		crdt.Sync(msg.Src, body.Count)
+
+		return nil
+	})
+
+	node.Handle("read", func(msg maelstrom.Message) error {
+		value := count + crdt.Read()
+
+		resBody := map[string]any{
+			"type":  "read_ok",
+			"value": value,
+		}
+
+		return node.Reply(msg, resBody)
+	})
+
+	if err := node.Run(); err != nil {
+		log.Fatal(err)
+	}
+}
