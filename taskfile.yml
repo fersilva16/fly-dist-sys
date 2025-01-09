@@ -57,7 +57,18 @@ tasks:
   test-counter:
     desc: Run counter test
     cmds:
-      - go test ./counter {{.CLI_ARGS}}
+      - task: test-counter-ot
+      - task: test-counter-crdt
+
+  test-counter-ot:
+    desc: Run counter OT test
+    cmds:
+      - go test ./counter/ot {{.CLI_ARGS}}
+
+  test-counter-crdt:
+    desc: Run counter CRDT test
+    cmds:
+      - go test ./counter/crdt {{.CLI_ARGS}}
 
   test-kafka:
     desc: Run kafka test
@@ -153,8 +164,20 @@ tasks:
   run-counter:
     desc: Run counter test
     cmds:
-      - task: build-counter
-      - maelstrom test -w g-counter --bin ./build/counter --node-count 3 --rate 100 --time-limit 20 --nemesis partition
+      - task: run-counter-ot
+      - task: run-counter-crdt
+
+  run-counter-ot:
+    desc: Run counter test over OT solution
+    cmds:
+      - task: build-counter-ot
+      - maelstrom test -w g-counter --bin ./build/counter/ot --node-count 3 --rate 100 --time-limit 20 --nemesis partition
+
+  run-counter-crdt:
+    desc: Run counter test over CRDT solution
+    cmds:
+      - task: build-counter-crdt
+      - maelstrom test -w g-counter --bin ./build/counter/crdt --node-count 3 --rate 100 --time-limit 20 --nemesis partition
 
   run-kafka:
     desc: Run kafka test
@@ -172,7 +195,7 @@ tasks:
       - task: build-kafka
 
   build-echo:
-    desc: Build echo test
+    desc: Build echo
     sources:
       - echo/**/*
     generates:
@@ -181,7 +204,7 @@ tasks:
       - go build -o ./build/echo ./echo
 
   build-uniqueids:
-    desc: Build uniqueids test
+    desc: Build uniqueids
     sources:
       - uniqueids/**/*
     generates:
@@ -190,7 +213,7 @@ tasks:
       - go build -o ./build/uniqueids ./uniqueids
 
   build-broadcast:
-    desc: Build broadcast test
+    desc: Build broadcast
     cmds:
       - task: build-broadcast-single-node
       - task: build-broadcast-multi-node
@@ -199,7 +222,7 @@ tasks:
       - task: build-broadcast-efficient-ii
 
   build-broadcast-single-node:
-    desc: Build broadcast single-node test
+    desc: Build broadcast single-node
     sources:
       - broadcast/a/**/*
     generates:
@@ -208,7 +231,7 @@ tasks:
       - go build -o ./build/broadcast/a ./broadcast/a
 
   build-broadcast-multi-node:
-    desc: Build broadcast multi-node test
+    desc: Build broadcast multi-node
     sources:
       - broadcast/b/**/*
     generates:
@@ -217,7 +240,7 @@ tasks:
       - go build -o ./build/broadcast/b ./broadcast/b
 
   build-broadcast-fault-tolerant:
-    desc: Build broadcast fault-tolerant test
+    desc: Build broadcast fault-tolerant
     sources:
       - broadcast/c/**/*
     generates:
@@ -226,7 +249,7 @@ tasks:
       - go build -o ./build/broadcast/c ./broadcast/c
 
   build-broadcast-efficient-i:
-    desc: Build broadcast efficient-i test
+    desc: Build broadcast efficient-i
     sources:
       - broadcast/d/**/*
     generates:
@@ -235,7 +258,7 @@ tasks:
       - go build -o ./build/broadcast/d ./broadcast/d
 
   build-broadcast-efficient-ii:
-    desc: Build broadcast efficient-ii test
+    desc: Build broadcast efficient-ii
     sources:
       - broadcast/e/**/*
     generates:
@@ -244,16 +267,31 @@ tasks:
       - go build -o ./build/broadcast/e ./broadcast/e
 
   build-counter:
-    desc: Build counter test
-    sources:
-      - counter/**/*
-    generates:
-      - build/counter
+    desc: Build counter
     cmds:
-      - go build -o ./build/counter ./counter
+      - task: build-counter-ot
+      - task: build-counter-crdt
+
+  build-counter-ot:
+    desc: Build counter OT
+    sources:
+      - counter/ot/**/*
+    generates:
+      - build/counter/ot
+    cmds:
+      - go build -o ./build/counter/ot ./counter/ot
+
+  build-counter-crdt:
+    desc: Build counter CRDT
+    sources:
+      - counter/crdt/**/*
+    generates:
+      - build/counter/crdt
+    cmds:
+      - go build -o ./build/counter/crdt ./counter/crdt
 
   build-kafka:
-    desc: Build kafka test
+    desc: Build kafka
     sources:
       - kafka/**/*
     generates:
