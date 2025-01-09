@@ -79,7 +79,7 @@ tasks:
     desc: Run all
     cmds:
       - task: run-echo
-      - task: run-unique-ids
+      - task: run-uniqueids
       - task: run-broadcast
       - task: run-counter
       - task: run-kafka

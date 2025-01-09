@@ -17,6 +17,11 @@ type PropagateRequest struct {
 	Count int `json:"count"`
 }
 
+type ReadResponse struct {
+	maelstrom.MessageBody
+	Value int `json:"value"`
+}
+
 var node = maelstrom.NewNode()
 
 func main() {
@@ -50,8 +55,8 @@ func main() {
 			}()
 		}
 
-		resBody := map[string]any{
-			"type": "add_ok",
+		resBody := maelstrom.MessageBody{
+			Type: "add_ok",
 		}
 
 		return node.Reply(msg, resBody)
@@ -72,9 +77,12 @@ func main() {
 	node.Handle("read", func(msg maelstrom.Message) error {
 		value := count + crdt.Read()
 
-		resBody := map[string]any{
-			"type":  "read_ok",
-			"value": value,
+		resBody := ReadResponse{
+			MessageBody: maelstrom.MessageBody{
+				Type: "read_ok",
+			},
+
+			Value: value,
 		}
 
 		return node.Reply(msg, resBody)

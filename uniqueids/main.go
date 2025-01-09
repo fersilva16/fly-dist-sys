@@ -7,6 +7,11 @@ import (
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
 )
 
+type GenerateResponse struct {
+	maelstrom.MessageBody
+	ID string `json:"id"`
+}
+
 var node = maelstrom.NewNode()
 var clock Clock = TimeClock{}
 var count int64
@@ -17,9 +22,12 @@ func main() {
 
 		count += 1
 
-		resBody := map[string]any{
-			"type": "generate_ok",
-			"id":   id,
+		resBody := GenerateResponse{
+			MessageBody: maelstrom.MessageBody{
+				Type: "generate_ok",
+			},
+
+			ID: id,
 		}
 
 		return node.Reply(msg, resBody)

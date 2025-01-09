@@ -12,6 +12,11 @@ type EchoRequest struct {
 	Echo string `json:"echo"`
 }
 
+type EchoResponse struct {
+	maelstrom.MessageBody
+	Echo string `json:"echo"`
+}
+
 var node = maelstrom.NewNode()
 
 func main() {
@@ -22,9 +27,12 @@ func main() {
 			return err
 		}
 
-		resBody := map[string]any{
-			"type": "echo_ok",
-			"echo": body.Echo,
+		resBody := EchoResponse{
+			MessageBody: maelstrom.MessageBody{
+				Type: "echo_ok",
+			},
+
+			Echo: body.Echo,
 		}
 
 		return node.Reply(msg, resBody)
