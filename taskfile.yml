@@ -73,7 +73,12 @@ tasks:
   test-kafka:
     desc: Run kafka test
     cmds:
-      - go test ./kafka {{.CLI_ARGS}}
+      - task: test-kafka-single-node
+
+  test-kafka-single-node:
+    desc: Run kafka single-node test
+    cmds:
+      - go test ./kafka/a {{.CLI_ARGS}}
 
   run-all:
     desc: Run all
@@ -182,8 +187,13 @@ tasks:
   run-kafka:
     desc: Run kafka test
     cmds:
-      - task: build-kafka
-      - maelstrom test -w kafka --bin ./build/kafka --node-count 1 --concurrency 2n --time-limit 20 --rate 1000
+      - task: run-kafka-single-node
+
+  run-kafka-single-node:
+    desc: Run kafka single-node test
+    cmds:
+      - task: build-kafka-single-node
+      - maelstrom test -w kafka --bin ./build/kafka/a --node-count 1 --concurrency 2n --time-limit 20 --rate 1000
 
   build-all:
     desc: Build all
@@ -292,9 +302,14 @@ tasks:
 
   build-kafka:
     desc: Build kafka
-    sources:
-      - kafka/**/*
-    generates:
-      - build/kafka
     cmds:
-      - go build -o ./build/kafka ./kafka
+      - task: build-kafka-single-node
+
+  build-kafka-single-node:
+    desc: Build kafka single-node
+    sources:
+      - kafka/a/**/*
+    generates:
+      - build/kafka/a
+    cmds:
+      - go build -o ./build/kafka/a ./kafka/a

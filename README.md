@@ -85,9 +85,18 @@ OT (Operational Transformation) solution uses the Sequential KV store from Maels
 
 [solution](counter/ot/main.go) / [tests](counter/ot/main_test.go)
 
-CRDT (Conflict-free Replicated Data Type) solution uses a map to store the counter of the other nodes and propagates its own when receives a `add` message.
+CRDT (Conflict-free Replicated Data Type) solution uses a map to store the counter of the other nodes and propagates its own when receives an `add` message.
 
 [solution](counter/crdt/main.go) / [tests](counter/crdt/main_test.go)
+
+Links:
+
+- [CRDTs: The Hard Parts](https://www.youtube.com/watch?v=x7drE24geUw) by Martin Kleppmann - Great explanation about the differences between OTs and CRDTs
+- [Conflict-free Replicated Data Types](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) on Wikipedia
+
+### [Challenge #5a: Single-Node Kafka-Style Log](https://fly.io/dist-sys/5a)
+
+[solution](kafka/a/main.go) / [tests](kafka/a/main_test.go)
 
 ## Project Structure
 
