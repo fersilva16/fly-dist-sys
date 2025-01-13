@@ -98,6 +98,10 @@ Links:
 
 [solution](kafka/a/main.go) / [tests](kafka/a/main_test.go)
 
+### [Challenge #5b: Multi-Node Kafka-Style Log](https://fly.io/dist-sys/5b)
+
+[solution](kafka/b/main.go) / [tests](kafka/b/main_test.go)
+
 ## Project Structure
 
 This repo is a Go workspace where each solution is in a separate module.
