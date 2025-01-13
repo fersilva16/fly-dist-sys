@@ -122,6 +122,47 @@ func (kv *KV) HandleRead(key string, value any) error {
 	return nil
 }
 
+func (kv *KV) HandleReadNotExist(key string) error {
+	output, err := kv.Read()
+
+	if err != nil {
+		return err
+	}
+
+	var msg maelstrom.Message
+
+	if err := json.Unmarshal([]byte(output), &msg); err != nil {
+		return err
+	}
+
+	var body KVReadMessageBody
+
+	if err := json.Unmarshal(msg.Body, &body); err != nil {
+		return err
+	}
+
+	if body.Type != "read" {
+		return fmt.Errorf("invalid type: %s (expected read)", body.Type)
+	}
+
+	if body.Key != key {
+		return fmt.Errorf("invalid key: %s (expected %s)", body.Key, key)
+	}
+
+	err = kv.Write(maelstrom.MessageBody{
+		Type:      "error",
+		InReplyTo: body.MsgID,
+		Code:      20,
+		Text:      "key does not exist",
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (kv *KV) HandleWrite(key string, value any) error {
 	output, err := kv.Read()
 

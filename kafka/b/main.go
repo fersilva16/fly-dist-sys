@@ -132,7 +132,7 @@ func main() {
 				continue
 			}
 
-			for i := offset; i <= currentOffset; i++ {
+			for i := offset; i < currentOffset; i++ {
 				msg, err := kv.ReadInt(ctx, fmt.Sprintf("%s-%d", key, i))
 
 				if err != nil {
