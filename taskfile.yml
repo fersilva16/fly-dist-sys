@@ -80,6 +80,11 @@ tasks:
     cmds:
       - go test ./kafka/a {{.CLI_ARGS}}
 
+  test-kafka-multi-node:
+    desc: Run kafka multi-node test
+    cmds:
+      - go test ./kafka/b {{.CLI_ARGS}}
+
   run-all:
     desc: Run all
     cmds:
@@ -194,6 +199,12 @@ tasks:
     cmds:
       - task: build-kafka-single-node
       - maelstrom test -w kafka --bin ./build/kafka/a --node-count 1 --concurrency 2n --time-limit 20 --rate 1000
+
+  run-kafka-multi-node:
+    desc: Run kafka multi-node test
+    cmds:
+      - task: build-kafka-multi-node
+      - maelstrom test -w kafka --bin ./build/kafka/b --node-count 2 --concurrency 2n --time-limit 20 --rate 1000
 
   build-all:
     desc: Build all
@@ -313,3 +324,12 @@ tasks:
       - build/kafka/a
     cmds:
       - go build -o ./build/kafka/a ./kafka/a
+
+  build-kafka-multi-node:
+    desc: Build kafka multi-node
+    sources:
+      - kafka/b/**/*
+    generates:
+      - build/kafka/b
+    cmds:
+      - go build -o ./build/kafka/b ./kafka/b
