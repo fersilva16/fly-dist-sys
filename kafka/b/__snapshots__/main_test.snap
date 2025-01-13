@@ -22,3 +22,15 @@
 [Test - 6]
 {"src":"n0","dest":"c0","body":{"in_reply_to":7,"offsets":{"0":1},"type":"list_committed_offsets_ok"}}
 ---
+
+[TestCASConflict - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"offset":1,"type":"send_ok"}}
+---
+
+[TestCASConflict - 2]
+{"src":"n0","dest":"c0","body":{"in_reply_to":3,"msgs":{"0":[[0,82],[1,83]]},"type":"poll_ok"}}
+---
+
+[TestCommitedOffsetDoesNotExist - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":7,"offsets":{"0":0},"type":"list_committed_offsets_ok"}}
+---
