@@ -120,6 +120,18 @@ The leader handles the offsets to avoid conflicts. All the nodes exchange messag
 
 [solution](kafka/c/main.go) / [tests](kafka/c/main_test.go)
 
+### [Challenge #6a: Single-Node, Totally-Available Transactions](https://fly.io/dist-sys/6a/)
+
+[solution](txn/a/main.go) / [tests](txn/a/main_test.go)
+
+### [Challenge #6b: Totally-Available, Read Uncommitted Transactions](https://fly.io/dist-sys/6b/)
+
+[solution](txn/b/main.go) / [tests](txn/b/main_test.go)
+
+### [Challenge #6c: Totally-Available, Read Committed Transactions](https://fly.io/dist-sys/6c/)
+
+[solution](txn/c/main.go) / [tests](txn/c/main_test.go)
+
 ## Project Structure
 
 This repo is a Go workspace where each solution is in a separate module.

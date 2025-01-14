@@ -9,6 +9,7 @@ tasks:
       - task: test-broadcast
       - task: test-counter
       - task: test-kafka
+      - task: test-txn
 
   test-echo:
     desc: Run echo test
@@ -92,6 +93,28 @@ tasks:
     cmds:
       - go test ./kafka/c {{.CLI_ARGS}}
 
+  test-txn:
+    desc: Run txn test
+    cmds:
+      - task: test-txn-single-node
+      - task: test-txn-uncommitted
+      - task: test-txn-committed
+
+  test-txn-single-node:
+    desc: Run txn single-node test
+    cmds:
+      - go test ./txn/a {{.CLI_ARGS}}
+
+  test-txn-uncommitted:
+    desc: Run txn uncommitted test
+    cmds:
+      - go test ./txn/b {{.CLI_ARGS}}
+
+  test-txn-committed:
+    desc: Run txn committed test
+    cmds:
+      - go test ./txn/c {{.CLI_ARGS}}
+
   run-all:
     desc: Run all
     cmds:
@@ -100,6 +123,7 @@ tasks:
       - task: run-broadcast
       - task: run-counter
       - task: run-kafka
+      - task: run-txn
 
   run-echo:
     desc: Run echo test
@@ -221,6 +245,43 @@ tasks:
       - task: build-kafka-efficient
       - maelstrom test -w kafka --bin ./build/kafka/c --node-count 2 --concurrency 2n --time-limit 20 --rate 1000
 
+  run-txn:
+    desc: Run txn test
+    cmds:
+      - task: run-txn-single-node
+      - task: run-txn-uncommitted
+      - task: run-txn-committed
+
+  run-txn-single-node:
+    desc: Run txn single-node test
+    cmds:
+      - task: build-txn-single-node
+      - maelstrom test -w txn-rw-register --bin ./build/txn/a  --node-count 1 --time-limit 20 --rate 1000 --concurrency 2n --consistency-models read-uncommitted --availability total
+
+  run-txn-uncommitted:
+    desc: Run txn uncommitted test
+    cmds:
+      - task: build-txn-uncommitted1
+      - task: build-txn-uncommitted2
+
+  run-txn-uncommitted1:
+    desc: Run txn uncommitted test
+    cmds:
+      - task: build-txn-uncommitted
+      - maelstrom test -w txn --bin ./build/txn/b --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-uncommitted
+
+  run-txn-uncommitted2:
+    desc: Run txn uncommitted test
+    cmds:
+      - task: build-txn-uncommitted
+      - maelstrom test -w txn --bin ./build/txn/b --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-uncommitted --availability total --nemesis partition
+
+  run-txn-committed:
+    desc: Run txn committed test
+    cmds:
+      - task: build-txn-committed
+      - maelstrom test -w txn --bin ./build/txn/c --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-committed --availability total --nemesis partition
+
   build-all:
     desc: Build all
     cmds:
@@ -229,6 +290,7 @@ tasks:
       - task: build-broadcast
       - task: build-counter
       - task: build-kafka
+      - task: build-txn
 
   build-echo:
     desc: Build echo
@@ -359,3 +421,37 @@ tasks:
       - build/kafka/c
     cmds:
       - go build -o ./build/kafka/c ./kafka/c
+
+  build-txn:
+    desc: Build txn
+    cmds:
+      - task: build-txn-single-node
+      - task: build-txn-uncommitted
+      - task: build-txn-committed
+
+  build-txn-single-node:
+    desc: Build txn single-node
+    sources:
+      - txn/a/**/*
+    generates:
+      - build/txn/a
+    cmds:
+      - go build -o ./build/txn/a ./txn/a
+
+  build-txn-uncommitted:
+    desc: Build txn uncommitted
+    sources:
+      - txn/b/**/*
+    generates:
+      - build/txn/b
+    cmds:
+      - go build -o ./build/txn/b ./txn/b
+
+  build-txn-committed:
+    desc: Build txn committed
+    sources:
+      - txn/c/**/*
+    generates:
+      - build/txn/c
+    cmds:
+      - go build -o ./build/txn/c ./txn/c
