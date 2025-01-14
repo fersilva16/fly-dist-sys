@@ -1,0 +1,60 @@
+
+[Test - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"offset":0,"type":"send_ok"}}
+---
+
+[Test - 2]
+{"src":"n0","dest":"n1","body":{"type":"new_message","key":"0","offset":0,"msg":83}}
+---
+
+[Test - 3]
+{"src":"n0","dest":"c0","body":{"in_reply_to":3,"msgs":{"0":[[0,83]]},"type":"poll_ok"}}
+---
+
+[Test - 4]
+{"src":"n0","dest":"c0","body":{"in_reply_to":4,"offset":1,"type":"send_ok"}}
+---
+
+[Test - 5]
+{"src":"n0","dest":"n1","body":{"type":"new_message","key":"0","offset":1,"msg":84}}
+---
+
+[Test - 6]
+{"src":"n0","dest":"c0","body":{"in_reply_to":5,"msgs":{"0":[[1,84]]},"type":"poll_ok"}}
+---
+
+[Test - 7]
+{"src":"n0","dest":"c0","body":{"in_reply_to":6,"type":"commit_offsets_ok"}}
+---
+
+[Test - 8]
+{"src":"n0","dest":"n1","body":{"type":"commit_offsets","offsets":{"0":1},"gossip":true}}
+---
+
+[Test - 9]
+{"src":"n0","dest":"c0","body":{"in_reply_to":7,"offsets":{"0":1},"type":"list_committed_offsets_ok"}}
+---
+
+[TestFollower - 1]
+{"src":"n1","dest":"n0","body":{"key":"0","msg":83,"msg_id":1,"type":"next_offset"}}
+---
+
+[TestFollower - 2]
+{"src":"n1","dest":"c0","body":{"in_reply_to":2,"offset":0,"type":"send_ok"}}
+---
+
+[TestFollower - 3]
+{"src":"n1","dest":"c0","body":{"in_reply_to":4,"msgs":{"0":[[0,83],[1,84]]},"type":"poll_ok"}}
+---
+
+[TestFollower - 4]
+{"src":"n1","dest":"c0","body":{"in_reply_to":6,"type":"commit_offsets_ok"}}
+---
+
+[TestFollower - 5]
+{"src":"n1","dest":"n0","body":{"type":"commit_offsets","offsets":{"0":1},"gossip":true}}
+---
+
+[TestFollower - 6]
+{"src":"n1","dest":"c0","body":{"in_reply_to":7,"offsets":{"0":1},"type":"list_committed_offsets_ok"}}
+---

@@ -74,6 +74,8 @@ tasks:
     desc: Run kafka test
     cmds:
       - task: test-kafka-single-node
+      - task: test-kafka-multi-node
+      - task: test-kafka-efficient
 
   test-kafka-single-node:
     desc: Run kafka single-node test
@@ -84,6 +86,11 @@ tasks:
     desc: Run kafka multi-node test
     cmds:
       - go test ./kafka/b {{.CLI_ARGS}}
+
+  test-kafka-efficient:
+    desc: Run kafka efficient test
+    cmds:
+      - go test ./kafka/c {{.CLI_ARGS}}
 
   run-all:
     desc: Run all
@@ -193,6 +200,8 @@ tasks:
     desc: Run kafka test
     cmds:
       - task: run-kafka-single-node
+      - task: run-kafka-multi-node
+      - task: run-kafka-efficient
 
   run-kafka-single-node:
     desc: Run kafka single-node test
@@ -205,6 +214,12 @@ tasks:
     cmds:
       - task: build-kafka-multi-node
       - maelstrom test -w kafka --bin ./build/kafka/b --node-count 2 --concurrency 2n --time-limit 20 --rate 1000
+
+  run-kafka-efficient:
+    desc: Run kafka efficient test
+    cmds:
+      - task: build-kafka-efficient
+      - maelstrom test -w kafka --bin ./build/kafka/c --node-count 2 --concurrency 2n --time-limit 20 --rate 1000
 
   build-all:
     desc: Build all
@@ -315,6 +330,8 @@ tasks:
     desc: Build kafka
     cmds:
       - task: build-kafka-single-node
+      - task: build-kafka-multi-node
+      - task: build-kafka-efficient
 
   build-kafka-single-node:
     desc: Build kafka single-node
@@ -333,3 +350,12 @@ tasks:
       - build/kafka/b
     cmds:
       - go build -o ./build/kafka/b ./kafka/b
+
+  build-kafka-efficient:
+    desc: Build kafka efficient
+    sources:
+      - kafka/c/**/*
+    generates:
+      - build/kafka/c
+    cmds:
+      - go build -o ./build/kafka/c ./kafka/c

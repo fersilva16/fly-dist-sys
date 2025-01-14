@@ -102,6 +102,10 @@ Links:
 
 [solution](kafka/b/main.go) / [tests](kafka/b/main_test.go)
 
+### [Challenge #5c: Efficient Kafka-Style Log](https://fly.io/dist-sys/5c)
+
+[solution](kafka/c/main.go) / [tests](kafka/c/main_test.go)
+
 ## Project Structure
 
 This repo is a Go workspace where each solution is in a separate module.
