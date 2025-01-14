@@ -96,13 +96,27 @@ Links:
 
 ### [Challenge #5a: Single-Node Kafka-Style Log](https://fly.io/dist-sys/5a)
 
+Simple implementation of a Kafka-style log. Store messages in a map, and return the messages after a given offset.
+
 [solution](kafka/a/main.go) / [tests](kafka/a/main_test.go)
 
 ### [Challenge #5b: Multi-Node Kafka-Style Log](https://fly.io/dist-sys/5b)
 
+Implementation using the Lin-KV store:
+
+- Compare and Swap to get the next offset for a key
+- Store the each message in a separated key
+- Last Write Wins to store the committed offsets
+
 [solution](kafka/b/main.go) / [tests](kafka/b/main_test.go)
 
 ### [Challenge #5c: Efficient Kafka-Style Log](https://fly.io/dist-sys/5c)
+
+The previous solution also works for this challenge, so I tried to remove the KV completely and use a leader-follower approach.
+
+The leader node is fixed to `n0` (could be done with a consensus algorithm).
+
+The leader handles the offsets to avoid conflicts. All the nodes exchange messages to get updated messages and committed offsets.
 
 [solution](kafka/c/main.go) / [tests](kafka/c/main_test.go)
 
