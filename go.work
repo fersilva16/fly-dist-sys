@@ -6,6 +6,7 @@ use (
 	./echo
 	./kafka
 	./testutils
+	./txn
 	./uniqueids
 	./utils
 )

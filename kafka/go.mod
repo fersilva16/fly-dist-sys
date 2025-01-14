@@ -6,7 +6,6 @@ require (
 	github.com/gkampitakis/go-snaps v0.5.8
 	github.com/jepsen-io/maelstrom/demo/go v0.0.0-20241204184542-016086a90274
 	github.com/stretchr/testify v1.10.0
-	github.com/trailofbits/go-mutexasserts v0.0.0-20230328101604-8cdbc5f3d279
 )
 
 require (
