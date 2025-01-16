@@ -29,7 +29,7 @@ func TestEcho(t *testing.T) {
 			MsgID: 2,
 		},
 
-		Txn: []Op{
+		Txn: Txn{
 			{WRITE, 1, 1},
 			{READ, 2, nil},
 		},
@@ -45,7 +45,7 @@ func TestEcho(t *testing.T) {
 			MsgID: 3,
 		},
 
-		Txn: []Op{
+		Txn: Txn{
 			{READ, 1, nil},
 			{WRITE, 2, 2},
 		},

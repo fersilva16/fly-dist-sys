@@ -13,6 +13,8 @@ type Op struct {
 	value interface{}
 }
 
+type Txn []Op
+
 func (o *Op) MarshalJSON() ([]byte, error) {
 	return json.Marshal([]interface{}{o.fn, o.key, o.value})
 }
