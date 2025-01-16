@@ -1,6 +1,6 @@
 
 [TestEcho - 1]
-{"src":"n0","dest":"c0","body":{"in_reply_to":2,"txn":[["w",1,1],["r",2,0]],"type":"txn_ok"}}
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"txn":[["w",1,1],["r",2,null]],"type":"txn_ok"}}
 ---
 
 [TestEcho - 2]

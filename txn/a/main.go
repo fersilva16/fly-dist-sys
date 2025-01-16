@@ -10,19 +10,19 @@ import (
 type TxnRequest struct {
 	maelstrom.MessageBody
 
-	Txn []Op `json:"txn"`
+	Txn Txn `json:"txn"`
 }
 
 type TxnResponse struct {
 	maelstrom.MessageBody
 
-	Txn []Op `json:"txn"`
+	Txn Txn `json:"txn"`
 }
 
 var node = maelstrom.NewNode()
 
 func main() {
-	store := NewStore()
+	store := NewTxnStore()
 
 	node.Handle("txn", func(msg maelstrom.Message) error {
 		var body TxnRequest
@@ -31,32 +31,14 @@ func main() {
 			return err
 		}
 
-		res := []Op{}
-
-		for _, op := range body.Txn {
-			if op.fn == WRITE {
-				store.Write(op.key, op.value)
-
-				res = append(res, Op{WRITE, op.key, op.value})
-
-				continue
-			}
-
-			value, ok := store.Read(op.key)
-
-			if !ok {
-				value = 0
-			}
-
-			res = append(res, Op{READ, op.key, value})
-		}
+		committedTxn := store.Commit(body.Txn)
 
 		resBody := TxnResponse{
 			MessageBody: maelstrom.MessageBody{
 				Type: "txn_ok",
 			},
 
-			Txn: res,
+			Txn: committedTxn,
 		}
 
 		return node.Reply(msg, resBody)
