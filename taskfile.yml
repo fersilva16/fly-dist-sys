@@ -261,26 +261,26 @@ tasks:
   run-txn-uncommitted:
     desc: Run txn uncommitted test
     cmds:
-      - task: build-txn-uncommitted1
-      - task: build-txn-uncommitted2
+      - task: run-txn-uncommitted1
+      - task: run-txn-uncommitted2
 
   run-txn-uncommitted1:
     desc: Run txn uncommitted test
     cmds:
       - task: build-txn-uncommitted
-      - maelstrom test -w txn --bin ./build/txn/b --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-uncommitted
+      - maelstrom test -w txn-rw-register --bin ./build/txn/b --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-uncommitted
 
   run-txn-uncommitted2:
     desc: Run txn uncommitted test
     cmds:
       - task: build-txn-uncommitted
-      - maelstrom test -w txn --bin ./build/txn/b --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-uncommitted --availability total --nemesis partition
+      - maelstrom test -w txn-rw-register --bin ./build/txn/b --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-uncommitted --availability total --nemesis partition
 
   run-txn-committed:
     desc: Run txn committed test
     cmds:
       - task: build-txn-committed
-      - maelstrom test -w txn --bin ./build/txn/c --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-committed --availability total --nemesis partition
+      - maelstrom test -w txn-rw-register --bin ./build/txn/c --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-committed --availability total --nemesis partition
 
   build-all:
     desc: Build all

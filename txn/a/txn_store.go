@@ -14,6 +14,9 @@ func NewTxnStore() *TxnStore {
 }
 
 func (s *TxnStore) Commit(txn Txn) Txn {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	committedTxn := Txn{}
 
 	for _, op := range txn {
@@ -32,18 +35,12 @@ func (s *TxnStore) commitOp(op Op) Op {
 }
 
 func (s *TxnStore) commitWrite(key int, value interface{}) Op {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
 	s.m[key] = value
 
 	return Op{WRITE, key, value}
 }
 
 func (s *TxnStore) commitRead(key int) Op {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
 	value := s.m[key]
 
 	return Op{READ, key, value}
