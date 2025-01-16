@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestEcho(t *testing.T) {
+func Test(t *testing.T) {
 	require := require.New(t)
 
 	node = maelstrom.NewNode()
