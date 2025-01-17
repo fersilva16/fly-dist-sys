@@ -1,0 +1,36 @@
+
+[Test - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"txn":[["w",1,1],["r",2,null]],"type":"txn_ok"}}
+---
+
+[Test - 2]
+{"src":"n0","dest":"n1","body":{"type":"replicate","clock":1,"snapshot":{"1":[["w",1,1]]}}}
+---
+
+[Test - 3]
+{"src":"n0","dest":"n1","body":{"in_reply_to":0,"txnIds":[1],"type":"replicate_ok"}}
+---
+
+[Test - 4]
+{"src":"n0","dest":"c0","body":{"in_reply_to":3,"txn":[["r",1,1],["w",2,2]],"type":"txn_ok"}}
+---
+
+[Test - 5]
+{"src":"n0","dest":"n1","body":{"type":"replicate","clock":2,"snapshot":{"3":[["w",2,2]]}}}
+---
+
+[TestPartition - 1]
+{"src":"n0","dest":"c0","body":{"in_reply_to":2,"txn":[["w",1,1],["r",2,null]],"type":"txn_ok"}}
+---
+
+[TestPartition - 2]
+{"src":"n0","dest":"n1","body":{"type":"replicate","clock":1,"snapshot":{"1":[["w",1,1]]}}}
+---
+
+[TestPartition - 3]
+{"src":"n0","dest":"c0","body":{"in_reply_to":3,"txn":[["r",1,1],["w",2,2]],"type":"txn_ok"}}
+---
+
+[TestPartition - 4]
+{"src":"n0","dest":"n1","body":{"type":"replicate","clock":2,"snapshot":{"1":[["w",1,1]],"2":[["w",2,2]]}}}
+---
