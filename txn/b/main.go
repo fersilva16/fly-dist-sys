@@ -112,7 +112,7 @@ func main() {
 			return err
 		}
 
-		replicator.Remove(body.Keys)
+		replicator.Remove(msg.Src, body.Keys)
 
 		return nil
 	})
