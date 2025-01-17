@@ -22,7 +22,7 @@ type TxnResponse struct {
 var node = maelstrom.NewNode()
 
 func main() {
-	store := NewTxnStore()
+	store := NewStore()
 
 	node.Handle("txn", func(msg maelstrom.Message) error {
 		var body TxnRequest
@@ -31,7 +31,19 @@ func main() {
 			return err
 		}
 
-		committedTxn := store.Commit(body.Txn)
+		committedTxn := Txn{}
+
+		for _, op := range body.Txn {
+			if op.fn == READ {
+				committedTxn = append(committedTxn, Op{READ, op.key, store.Read(op.key)})
+
+				continue
+			}
+
+			store.Write(op.key, op.value)
+
+			committedTxn = append(committedTxn, op)
+		}
 
 		resBody := TxnResponse{
 			MessageBody: maelstrom.MessageBody{
