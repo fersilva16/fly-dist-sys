@@ -22,20 +22,21 @@ type TxnResponse struct {
 type ReplicateRequest struct {
 	maelstrom.MessageBody
 
-	Clock    int         `json:"clock"`
-	Snapshot map[int]Txn `json:"snapshot"`
+	Clock    int           `json:"clock"`
+	Snapshot map[int]Value `json:"snapshot"`
 }
 
 type ReplicateResponse struct {
 	maelstrom.MessageBody
 
-	TxnIds []int `json:"txnIds"`
+	Keys []int `json:"keys"`
 }
 
 var node = maelstrom.NewNode()
 
 func main() {
-	store := NewTxnStore(node)
+	counter := NewGCounter(node)
+	store := NewStore()
 	replicator := NewReplicator(node)
 
 	node.Handle("txn", func(msg maelstrom.Message) error {
@@ -45,11 +46,25 @@ func main() {
 			return err
 		}
 
-		txnId, committedTxn := store.Commit(body.Txn)
+		committedTxn := Txn{}
 
-		clock := store.counter.GetLocal()
+		txnId := counter.Increment()
 
-		replicator.Replicate(clock, txnId, committedTxn)
+		for _, op := range body.Txn {
+			if op.fn == READ {
+				committedTxn = append(committedTxn, Op{READ, op.key, store.Read(op.key)})
+
+				continue
+			}
+
+			store.Write(txnId, op.key, op.value)
+
+			committedTxn = append(committedTxn, op)
+
+			clock := counter.GetLocal()
+
+			replicator.Replicate(clock, txnId, op.key, op.value)
+		}
 
 		resBody := TxnResponse{
 			MessageBody: maelstrom.MessageBody{
@@ -69,14 +84,22 @@ func main() {
 			return err
 		}
 
-		txnIds := store.Merge(msg.Src, body.Clock, body.Snapshot)
+		counter.Sync(msg.Src, body.Clock)
+
+		keys := []int{}
+
+		for key, value := range body.Snapshot {
+			store.Write(value.TxnId, key, value.Value)
+
+			keys = append(keys, key)
+		}
 
 		resBody := ReplicateResponse{
 			MessageBody: maelstrom.MessageBody{
 				Type: "replicate_ok",
 			},
 
-			TxnIds: txnIds,
+			Keys: keys,
 		}
 
 		return node.Reply(msg, resBody)
@@ -89,7 +112,7 @@ func main() {
 			return err
 		}
 
-		replicator.Remove(body.TxnIds)
+		replicator.Remove(body.Keys)
 
 		return nil
 	})

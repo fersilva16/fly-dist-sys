@@ -51,7 +51,7 @@ func Test(t *testing.T) {
 			Type: "replicate_ok",
 		},
 
-		TxnIds: []int{1},
+		Keys: []int{1},
 	})
 
 	require.NoError(err)
@@ -62,9 +62,10 @@ func Test(t *testing.T) {
 		},
 
 		Clock: 1,
-		Snapshot: map[int]Txn{
+		Snapshot: map[int]Value{
 			2: {
-				{WRITE, 1, 2},
+				Value: 2,
+				TxnId: 1,
 			},
 		},
 	})
@@ -104,7 +105,7 @@ func Test(t *testing.T) {
 			Type: "replicate_ok",
 		},
 
-		TxnIds: []int{4},
+		Keys: []int{2},
 	})
 
 	require.NoError(err)
@@ -174,7 +175,7 @@ func TestPartition(t *testing.T) {
 			Type: "replicate_ok",
 		},
 
-		TxnIds: []int{1, 2},
+		Keys: []int{1, 2},
 	})
 
 	require.NoError(err)
