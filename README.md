@@ -138,7 +138,7 @@ Links:
 
 This solution uses a g-counter to keep track of the transactions, ensuring that G0/P0 anomalies won't happen and to keep the last possible state of the key, and replicates each write operation to all the other nodes.
 
-In case of network partitions, the key is replicated again until it's acknowledged by the node.
+In case of network partitions, the key is replicated until it's acknowledged by the node.
 
 [solution](txn/b/main.go) / [tests](txn/b/main_test.go)
 
@@ -149,7 +149,9 @@ Links:
 
 ### [Challenge #6c: Totally-Available, Read Committed Transactions](https://fly.io/dist-sys/6c/)
 
-The solution follows the same idea as the previous one, with g-counters, but it replicates entire transactions instead of individual writes.
+The solution follows the same idea as the previous one, with g-counters, but it replicates entire transactions instead of individual writes, and first writes to a separated store to then merge changes into the main store.
+
+Like the previous solution, the txn is replicated until it's acknowledged by the node. On replication, it also merges the changes using a separated store.
 
 [solution](txn/c/main.go) / [tests](txn/c/main_test.go)
 
