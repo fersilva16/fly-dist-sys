@@ -122,15 +122,40 @@ The leader handles the offsets to avoid conflicts. All the nodes exchange messag
 
 ### [Challenge #6a: Single-Node, Totally-Available Transactions](https://fly.io/dist-sys/6a/)
 
+Note: since the `txn-rw-register` workload doesn't really check any anomalies, and it passes even returning 0 for all keys. I've tried to follow the definitions from Jepsen. Thanks to [teivah](https://github.com/teivah/gossip-glomers) and [mchernyakov](https://github.com/mchernyakov/gossip-glomers) solutions, I could check if I was on the right track.
+
+A simple, totally-available transactional store, keeps a single map and lock for each read/write operation.
+
+This one took me lots of back-and-forth because I wasn't sure of how to implement the mutexes to get the right consistency model. Even through the test specify read uncommitted, this doesn't abort G0/P0 anomalies.
+
+Links:
+
+- [Some tips on the challenge](https://community.fly.io/t/challenge-6-tips/17928)
+
 [solution](txn/a/main.go) / [tests](txn/a/main_test.go)
 
 ### [Challenge #6b: Totally-Available, Read Uncommitted Transactions](https://fly.io/dist-sys/6b/)
 
+This solution uses a g-counter to keep track of the transactions, ensuring that G0/P0 anomalies won't happen and to keep the last possible state of the key, and replicates each write operation to all the other nodes.
+
+In case of network partitions, the key is replicated again until it's acknowledged by the node.
+
 [solution](txn/b/main.go) / [tests](txn/b/main_test.go)
+
+Links:
+
+- [Read Uncommitted](https://jepsen.io/consistency/models/read-uncommitted) from Jepsen docs
+- [A Critique of ANSI SQL Isolation Levels](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/tr-95-51.pdf) By Berenson, Microsoft
 
 ### [Challenge #6c: Totally-Available, Read Committed Transactions](https://fly.io/dist-sys/6c/)
 
+The solution follows the same idea as the previous one, with g-counters, but it replicates entire transactions instead of individual writes.
+
 [solution](txn/c/main.go) / [tests](txn/c/main_test.go)
+
+Links:
+
+- [Read Committed](https://jepsen.io/consistency/models/read-committed) from Jepsen docs
 
 ## Project Structure
 
