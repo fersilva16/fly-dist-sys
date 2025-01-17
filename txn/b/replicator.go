@@ -18,18 +18,21 @@ func NewReplicator(node *maelstrom.Node) *Replicator {
 	}
 }
 
-func (r *Replicator) Replicate(clock int, txnId int, txn Txn) {
-	r.add(txnId, txn)
+func (r *Replicator) Replicate(clock int, txnId int, key int, value interface{}) {
+	r.m.Store(key, Value{
+		Value: value,
+		TxnId: txnId,
+	})
 
 	for _, neighbor := range node.NodeIDs() {
 		if neighbor == node.ID() {
 			continue
 		}
 
-		snapshot := map[int]Txn{}
+		snapshot := map[int]Value{}
 
 		r.m.Range(func(key, value any) bool {
-			snapshot[key.(int)] = value.(Txn)
+			snapshot[key.(int)] = value.(Value)
 
 			return true
 		})
@@ -49,21 +52,8 @@ func (r *Replicator) Replicate(clock int, txnId int, txn Txn) {
 	}
 }
 
-func (r *Replicator) add(txnId int, txn Txn) {
-	// Only replicate writes
-	writeOnlyTxn := Txn{}
-
-	for _, op := range txn {
-		if op.fn == WRITE {
-			writeOnlyTxn = append(writeOnlyTxn, op)
-		}
-	}
-
-	r.m.Store(txnId, writeOnlyTxn)
-}
-
-func (r *Replicator) Remove(txnIds []int) {
-	for _, txnId := range txnIds {
-		r.m.Delete(txnId)
+func (r *Replicator) Remove(keys []int) {
+	for _, key := range keys {
+		r.m.Delete(key)
 	}
 }
