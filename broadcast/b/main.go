@@ -28,7 +28,7 @@ var node = maelstrom.NewNode()
 
 func main() {
 	messages := []int{}
-	neighbors := []string{}
+	neighborIds := []string{}
 
 	node.Handle("broadcast", func(msg maelstrom.Message) error {
 		var body BroadcastRequest
@@ -40,7 +40,7 @@ func main() {
 		if !slices.Contains(messages, body.Message) {
 			messages = append(messages, body.Message)
 
-			for _, neighborId := range neighbors {
+			for _, neighborId := range neighborIds {
 				if neighborId == msg.Src {
 					continue
 				}

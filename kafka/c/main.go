@@ -169,12 +169,12 @@ func main() {
 
 		messages.Add(body.Key, Pair{offset, body.Msg})
 
-		for _, neighbor := range node.NodeIDs() {
-			if neighbor == node.ID() {
+		for _, neighborId := range node.NodeIDs() {
+			if neighborId == node.ID() {
 				continue
 			}
 
-			if neighbor == msg.Src {
+			if neighborId == msg.Src {
 				continue
 			}
 
@@ -189,7 +189,7 @@ func main() {
 			}
 
 			go func() {
-				node.Send(neighbor, neighborMessage)
+				node.Send(neighborId, neighborMessage)
 			}()
 		}
 
@@ -255,8 +255,8 @@ func main() {
 		messages.Add(body.Key, Pair{offset, body.Msg})
 
 		if node.ID() == LEADER {
-			for _, neighbor := range node.NodeIDs() {
-				if neighbor == node.ID() {
+			for _, neighborId := range node.NodeIDs() {
+				if neighborId == node.ID() {
 					continue
 				}
 
@@ -271,7 +271,7 @@ func main() {
 				}
 
 				go func() {
-					node.Send(neighbor, neighborMessage)
+					node.Send(neighborId, neighborMessage)
 				}()
 			}
 		}
@@ -324,8 +324,8 @@ func main() {
 			return nil
 		}
 
-		for _, neighbor := range node.NodeIDs() {
-			if neighbor == node.ID() {
+		for _, neighborId := range node.NodeIDs() {
+			if neighborId == node.ID() {
 				continue
 			}
 
@@ -339,7 +339,7 @@ func main() {
 			}
 
 			go func() {
-				node.Send(neighbor, neighborMessage)
+				node.Send(neighborId, neighborMessage)
 			}()
 		}
 
