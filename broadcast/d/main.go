@@ -49,8 +49,8 @@ func main() {
 
 		messages := set.GetAll()
 
-		for _, neighbor := range node.NodeIDs() {
-			if neighbor == node.ID() {
+		for _, neighborId := range node.NodeIDs() {
+			if neighborId == node.ID() {
 				continue
 			}
 
@@ -63,7 +63,7 @@ func main() {
 			}
 
 			go func() {
-				node.Send(neighbor, neighborMessage)
+				node.Send(neighborId, neighborMessage)
 			}()
 		}
 

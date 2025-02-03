@@ -20,27 +20,27 @@ func NewReplicator(node *maelstrom.Node) *Replicator {
 }
 
 func (r *Replicator) Replicate(clock int, txnId int, key int, value interface{}) {
-	for _, neighbor := range node.NodeIDs() {
-		if neighbor == node.ID() {
+	for _, neighborId := range node.NodeIDs() {
+		if neighborId == node.ID() {
 			continue
 		}
 
-		nodeReplicator := r.load(neighbor)
+		nodeReplicator := r.load(neighborId)
 
 		nodeReplicator.Replicate(clock, txnId, key, value)
 	}
 }
 
-func (r *Replicator) load(neighbor string) *NodeReplicator {
+func (r *Replicator) load(neighborId string) *NodeReplicator {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	nodeReplicator, ok := r.m[neighbor]
+	nodeReplicator, ok := r.m[neighborId]
 
 	if !ok {
-		nodeReplicator = NewNodeReplicator(node, neighbor)
+		nodeReplicator = NewNodeReplicator(node, neighborId)
 
-		r.m[neighbor] = nodeReplicator
+		r.m[neighborId] = nodeReplicator
 	}
 
 	return nodeReplicator
