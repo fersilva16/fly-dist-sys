@@ -16,7 +16,7 @@ type Store struct {
 
 func NewStore() *Store {
 	return &Store{
-		m: make(map[int]*Value),
+		m: map[int]*Value{},
 	}
 }
 
