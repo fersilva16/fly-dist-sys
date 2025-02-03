@@ -9,7 +9,7 @@ type Store struct {
 
 func NewStore() *Store {
 	return &Store{
-		m: make(map[int]interface{}),
+		m: map[int]interface{}{},
 	}
 }
 
